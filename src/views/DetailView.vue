@@ -61,7 +61,7 @@
         <!-- Header -->
         <header class="w3-container" style="padding-top:22px">
           <div>
-            <ListOfUsers/>
+            <DetailsComponent/>
           </div>
         </header>
 
@@ -77,15 +77,14 @@
       </body>
   </div>
 </template>
-
 <script>
 // @ is an alias to /src
-import ListOfUsers from '@/components/ListOfUsers.vue';
+import DetailsComponent from '@/components/DetailsComponent.vue';
 
 export default {
   name: 'HomeView',
   components: {
-    ListOfUsers
+    DetailsComponent
   }, mounted() {
     if (localStorage.getItem("user") == null) {
       this.$router.push('/login');

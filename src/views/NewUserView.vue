@@ -1,5 +1,5 @@
 <template>
-  <div class="HomeComponent">
+  <div class="NewUserView">
     <title>Atletika-denik</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -61,7 +61,7 @@
         <!-- Header -->
         <header class="w3-container" style="padding-top:22px">
           <div>
-            <ListOfUsers/>
+            <NewUserComponent/>
           </div>
         </header>
 
@@ -77,15 +77,14 @@
       </body>
   </div>
 </template>
-
 <script>
 // @ is an alias to /src
-import ListOfUsers from '@/components/ListOfUsers.vue';
+import NewUserComponent from '@/components/NewUserComponent.vue';
 
 export default {
   name: 'HomeView',
   components: {
-    ListOfUsers
+    NewUserComponent
   }, mounted() {
     if (localStorage.getItem("user") == null) {
       this.$router.push('/login');

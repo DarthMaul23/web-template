@@ -35,6 +35,7 @@ export default {
         if (response.data.loggedin === true) {
           localStorage.setItem('user', response.data.userName);
           localStorage.setItem('token', response.data.token);
+          localStorage.setItem('admin', response.data.admin);
           this.$router.push('/main');
         } else {
           this.errorMessage = 'Invalid credentials';

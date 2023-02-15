@@ -11,7 +11,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in filteredItems" :key="item.id">
+        <tr v-for="item in filteredItems" :key="item.id" class="item.id%2">
           <td>{{ item.id }}</td>
           <td>{{ item.firstName }}</td>
           <td>{{ item.lastName }}</td>
@@ -58,4 +58,42 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+table {
+    display: table;
+    border-collapse: separate;
+    box-sizing: border-box;
+    text-indent: initial;
+    border-spacing: 2px;
+    border-color: grey;
+}
+
+thead {
+    background: #2196f3;
+    font-family: Arial;
+    color: #ffffff;
+    font-size: 20px;
+    padding: 1px 10px 1px 10px;
+    text-decoration: none;
+}
+
+td {
+    display: table-cell;
+    vertical-align: inherit;
+}
+
+#tbodyA {
+    font-size: 20px;
+    height: 30px;
+    font-family: Arial;
+    color: black;
+    background-color: #f7f9fc;
+}
+
+#tbodyB {
+    font-size: 20px;
+    height: 30px;
+    font-family: Arial;
+    color: black;
+    background-color: #e3e6ea;
+}
 </style>

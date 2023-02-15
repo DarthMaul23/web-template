@@ -2,6 +2,21 @@
   <div>
     <form @submit.prevent="saveData">
       <div>
+        <label>User Name:</label>
+        <input type="text" v-model="login.userName" />
+      </div>
+      <div>
+        <label>User Password:</label>
+        <input type="text" v-model="login.userPassword" />
+      </div>
+      <div>
+        <label>Trener:</label>
+        <select v-model="login.trenerId">
+          <option value="1">trener 1</option>
+          <option value="2">trener 2</option>
+        </select>
+      </div>
+      <div>
         <label>First Name:</label>
         <input type="text" v-model="formData.firstName" />
       </div>
@@ -85,6 +100,11 @@
 export default {
   data() {
     return {
+      login:{
+        userName: '',
+        userPassword: '',
+        trenerId: 0
+      },
       formData: {
         firstName: '',
         lastName: '',

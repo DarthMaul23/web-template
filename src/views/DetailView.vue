@@ -1,5 +1,5 @@
 <template>
-  <div class="HomeComponent">
+  <div class="DetailComponent">
     <title>Atletika-denik</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -44,6 +44,9 @@
           <router-link :to="{ name: 'newUser'}">
           <a href="atlet_add.php" class="w3-bar-item w3-button">PŘIDAT ATLETA</a>
         </router-link>
+        <router-link :to="{ name: 'trainingWeek'}">
+          <a class="w3-bar-item w3-button">TRENINKY</a>
+        </router-link>
           <!--<a href="athlet_page.php?id=" class="w3-bar-item w3-button w3-padding">INFORMACE</a>
             <a href="treninky.php?id=" class="w3-bar-item w3-button w3-padding">TRENINKY</a>
             <a href="rekordy.php?id=&&jmeno=&&prijmeni="class="w3-bar-item w3-button w3-padding">REKORDY</a>-->
@@ -82,11 +85,11 @@
 import DetailsComponent from '@/components/DetailsComponent.vue';
 
 export default {
-  name: 'HomeView',
+  name: 'DetailView',
   components: {
     DetailsComponent
   }, mounted() {
-    if (localStorage.getItem("user") == null) {
+    if (localStorage.getItem("user") == null || localStorage.getItem("admin")==false) {
       this.$router.push('/login');
     }
   },

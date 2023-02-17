@@ -25,10 +25,10 @@ const routes = [
     path: '/detail/:id',
     name: 'detail',
     component: DetailView
-  },
+  },       
   {
-    path: '/treninkTyden',
-    name: 'treninkTyden',
+    path: '/trainingWeek/:id',
+    name: 'trainingWeek',
     component: TreninkView
   },
   {

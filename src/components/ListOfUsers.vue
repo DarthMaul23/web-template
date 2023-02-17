@@ -68,7 +68,7 @@ table {
 }
 
 thead {
-    background: #2196f3;
+    background: #0088f8;
     font-family: Arial;
     color: #ffffff;
     font-size: 20px;

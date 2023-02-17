@@ -2,21 +2,25 @@
   <div>
     <div>
       <div>
-        <button @click="decreaseDate">- 7 Days</button>
+        <button @click="decreaseDate">Předchozí týden</button>
         <label for="date-selector">Date:</label>
         <input type="date" id="date-selector" v-model="selectedDate" @change="onChangeDate" />
-        <button @click="increaseDate">+ 7 Days</button>
+        <button @click="increaseDate">Následující týden</button>
       </div>
       <label for="user-selector">User:</label>
       <select id="user-selector" v-model="selectedUser">
         <option value="">All users</option>
         <option v-for="user in users" :value="user.id" :key="user.id">{{ user.name }}</option>
       </select>
-      <button @click="showModal = true">Open Modal</button>
+      <button @click="showModal = true">Nový trénink</button>
     </div>
 
     <div v-if="showModal" class="modal">
       <div class="modal-content">
+        <div>
+          <div><input type="date" id="date-selector-new" v-model="newDate" @change="onChangeNewDate" /></div>
+          <div><button @click="closeModal">X</button></div>
+        </div>
         <table>
           <thead>
             <tr>
@@ -24,6 +28,7 @@
               <th>Column 2</th>
               <th>Column 3</th>
               <th>Column 4</th>
+              <th>Akce</th>
             </tr>
           </thead>
           <tbody>
@@ -32,13 +37,12 @@
               <td><input type="text" v-model="row.col2"></td>
               <td><input type="text" v-model="row.col3"></td>
               <td><input type="text" v-model="row.col4"></td>
+              <td><button @click="removeRow(index)">Delete</button></td>
             </tr>
           </tbody>
         </table>
-
         <button @click="addRow">Add Row</button>
         <button @click="saveData">Save Data</button>
-        <button @click="closeModal">X</button>
       </div>
     </div>
 
@@ -54,12 +58,13 @@
             <td colspan="6"></td>
           </tr>
           <tr v-for="item in day.definition" :key="item.id" :class="!getColor(item.id) ? 'even' : ''">
-            <td>{{ day.definition.indexOf(item) + 1 }}</td>
+            <td :width="20">{{ day.definition.indexOf(item) + 1 }}</td>
             <td>{{ item.col1 }}</td>
             <td>{{ item.col2 }}</td>
             <td>{{ item.col3 }}</td>
             <td>{{ item.col4 }}</td>
-            <td :width="40"><img :src="getResponseIcon(day.response.at(day.definition.indexOf(item)).type)" :width="32" :height="32"/></td>
+            <td :width="40"><img :src="getResponseIcon(day.response.at(day.definition.indexOf(item)).type)" :width="32"
+                :height="32" /></td>
           </tr>
         </table>
       </div>
@@ -79,6 +84,7 @@ export default {
       selectedDate: new Date().toISOString().substr(0, 10),
       selectedUser: '',
       showModal: false,
+      newDate: new Date().toISOString().substr(0, 10),
       tableData: [
         { col1: "", col2: "", col3: "", col4: "" },
         { col1: "", col2: "", col3: "", col4: "" },
@@ -127,8 +133,17 @@ export default {
         this.items = response.data;
       });
     },
+    onChangeNewDate() {
+      console.log(this.newDate);
+    },
     addRow() {
       this.tableData.push({ col1: "", col2: "", col3: "", col4: "" })
+    },
+    removeRow(index) {
+      if (this.tableData.length > 3) {
+        this.tableData.splice(index, 1);
+      }
+      console.log(index);
     },
     saveData() {
       this.jsonData = JSON.stringify(this.tableData);
@@ -141,30 +156,32 @@ export default {
       ];
     },
     closeModal() {
-    this.showModal = false;
-  },
-  getResponseIcon(id){
-    if(id === 0){
-      return require('@/assets/q.png');
-    }else
-    if(id === 1){
-      return require('@/assets/ok.svg');
-    }else
-    if (id === 2){
-      return require('@/assets/nok.svg');
+      this.showModal = false;
+    },
+    getResponseIcon(id) {
+      if (id === 0) {
+        return require('@/assets/q.png');
+      } else
+        if (id === 1) {
+          return require('@/assets/ok.svg');
+        } else
+          if (id === 2) {
+            return require('@/assets/nok.svg');
+          }
     }
-  }
   }
 };
 </script>
-<style>
+<style scoped>
 .even {
   background-color: #f3f3f3;
 }
 
 .TreninkDay {
   min-width: 800px;
+  max-width: 900px;
   margin-top: 50px;
+  table-layout: fixed;
 }
 
 .modal {
@@ -176,7 +193,7 @@ export default {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0,0,0,0.4);
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 .modal-content {
@@ -192,7 +209,8 @@ table {
   width: 100%;
 }
 
-th, td {
+th,
+td {
   text-align: left;
   padding: 8px;
   border-bottom: 1px solid #ddd;
@@ -204,7 +222,7 @@ th {
 
 .close-button {
   position: absolute;
-  align:right;
+  align: right;
   top: 0;
   right: 0;
   padding: 5px;
@@ -215,5 +233,4 @@ th {
   border: none;
   cursor: pointer;
 }
-
 </style>

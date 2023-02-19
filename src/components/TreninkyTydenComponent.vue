@@ -95,7 +95,7 @@
             <td>{{ item.col2 }}</td>
             <td>{{ item.col3 }}</td>
             <td>{{ item.col4 }}</td>
-            <td :width="40"><img :src="getResponseIcon(day.response.at(day.definition.indexOf(item)).type)" :width="32"
+            <td :width="40"><img :src="getResponseIcon(day.response?.at(day.definition.indexOf(item)).type)" :width="32"
                 :height="32" /></td>
           </tr>
         </table>
@@ -111,8 +111,9 @@ export default {
   data() {
     return {
       items: [],
+      itemsEdit: [],
       users: [],
-      userId: 0,
+      userId: 2,
       editTreninkId: 0,
       editTreninkDate: "",
       selectedDate: new Date().toISOString().substr(0, 10),
@@ -122,10 +123,10 @@ export default {
       newDate: new Date().toISOString().substr(0, 10),
       editDate: new Date().toISOString().substr(0, 10),
       tableData: [
-        { col1: "", col2: "", col3: "", col4: "" },
-        { col1: "", col2: "", col3: "", col4: "" },
-        { col1: "", col2: "", col3: "", col4: "" },
-        { col1: "", col2: "", col3: "", col4: "" }
+        { id: 1, col1: "", col2: "", col3: "", col4: "" },
+        { id: 2, col1: "", col2: "", col3: "", col4: "" },
+        { id: 3, col1: "", col2: "", col3: "", col4: "" },
+        { id: 4, col1: "", col2: "", col3: "", col4: "" }
       ],
       tableDataEdit: [],
       jsonData: []
@@ -166,73 +167,84 @@ export default {
       this.getListOfTrainingDays();
     },
     getListOfTrainingDays() {
-      axios.get('https://localhost:7210/get-Training-Week?id=1&date=' + this.selectedDate).then(response => {
+      console.log(this.userId);
+      axios.get('https://localhost:7210/get-Training-Week?id=' + this.userId + '&date=' + this.selectedDate).then(response => {
+        console.log(response.data);
         this.items = response.data;
+        this.itemsEdit = response.data;
       });
     },
     onChangeDateModal(type) {
-      if(type === 1){ 
+      if (type === 1) {
         console.log(this.newDate);
-      }else 
-      if(type === 2){
-        console.log(this.editDate);
-      }
+      } else
+        if (type === 2) {
+          console.log(this.editDate);
+        }
     },
     addRow(type) {
-      if (type === 1 ){
-        this.tableData.push({ col1: "", col2: "", col3: "", col4: "" });
-      }else
-      if (type === 2 ){
-        this.tableDataEdit.push({ col1: "", col2: "", col3: "", col4: "" });
-      }
+      if (type === 1) {
+        this.tableData.push({ id: this.tableData.length + 1, col1: "", col2: "", col3: "", col4: "" });
+      } else
+        if (type === 2) {
+          this.tableDataEdit.push({ id: this.tableData.length + 1, col1: "", col2: "", col3: "", col4: "" });
+        }
     },
     removeRow(type, index) {
-      if (type === 1 ){
-      if (this.tableData.length > 3) {
-        this.tableData.splice(index, 1);
-      }
-    }else
-    if (type === 2 ){
-      this.tableDataEdit.splice(index, 1);
-      if(this.tableDataEdit.length === 0){
-        this.tableDataEdit.push({ col1: "", col2: "", col3: "", col4: "" });
-      }
-    }
+      if (type === 1) {
+        if (this.tableData.length > 3) {
+          this.tableData.splice(index, 1);
+        }
+      } else
+        if (type === 2) {
+          this.tableDataEdit.splice(index, 1);
+          if (this.tableDataEdit.length === 0) {
+            this.tableDataEdit.push({ id: this.tableData.length + 1, col1: "", col2: "", col3: "", col4: "" });
+          }
+        }
       console.log(index);
     },
-    saveData(type) {
-      if (type === 1 ){
-      this.jsonData = JSON.stringify(this.tableData);
-      console.log(this.jsonData);
-      this.tableData = [
-        { col1: "", col2: "", col3: "", col4: "" },
-        { col1: "", col2: "", col3: "", col4: "" },
-        { col1: "", col2: "", col3: "", col4: "" },
-        { col1: "", col2: "", col3: "", col4: "" }
-      ];
-    }else
-      if (type === 2){
-        this.jsonData = JSON.stringify(this.tableDataEdit);
-        console.log(this.jsonData);
-      }
+    async saveData(type) {
+      if (type === 1) {
+        let responses = [];
+
+        for (let i = 0; i < this.tableData.length; i++) {
+          responses.push({ type: 0 });
+        }
+
+        let data = { definitions: this.tableData, responses: responses };
+        console.log("Data: " + JSON.stringify(data));
+
+        this.tableData = [
+          { id: 0, col1: "", col2: "", col3: "", col4: "" },
+          { id: 1, col1: "", col2: "", col3: "", col4: "" },
+          { id: 2, col1: "", col2: "", col3: "", col4: "" },
+          { id: 3, col1: "", col2: "", col3: "", col4: "" }
+        ];
+        await axios.post('https://localhost:7210/create-Training', this.userId, this.newDate, 1, JSON.stringify(data));
+      } else
+        if (type === 2) {
+          this.jsonData = JSON.stringify(this.tableDataEdit);
+          console.log(this.jsonData);
+        }
     },
-    showEditModal(treninkId, treninkDate){
+    showEditModal(treninkId, treninkDate) {
       this.showModal2 = true;
       this.editTreninkId = treninkId;
       this.treninkDate = treninkDate;
       this.editDate = treninkDate;
       console.log(this.items);
-      this.tableDataEdit = this.items.find(x => x.definitionId === treninkId).definition;
+      this.tableDataEdit = this.itemsEdit.find(x => x.definitionId === treninkId).definition;
       console.log(this.tableDataEdit);
       console.log("Trenink Id: " + treninkId + " Trenink Date: " + treninkDate);
     },
     closeModal(type) {
-      if (type === 1 ){
+      if (type === 1) {
         this.showModal = false;
-      }else
-      if (type === 2) {
-        this.showModal2 = false;
-      }
+      } else
+        if (type === 2) {
+          this.showModal2 = false;
+        }
     },
     getResponseIcon(id) {
       if (id === 0) {

@@ -18,8 +18,8 @@
     <div v-if="showModal" class="modal">
       <div class="modal-content">
         <div>
-          <div><input type="date" id="date-selector-new" v-model="newDate" @change="onChangeNewDate" /></div>
-          <div><button @click="closeModal">X</button></div>
+          <div><input type="date" id="date-selector-new" v-model="newDate" @change="onChangeDateModal(1)" /></div>
+          <div><button @click="closeModal(1)">X</button></div>
         </div>
         <table>
           <thead>
@@ -37,12 +37,43 @@
               <td><input type="text" v-model="row.col2"></td>
               <td><input type="text" v-model="row.col3"></td>
               <td><input type="text" v-model="row.col4"></td>
-              <td><button @click="removeRow(index)">Delete</button></td>
+              <td><button @click="removeRow(1, index)">Delete</button></td>
             </tr>
           </tbody>
         </table>
-        <button @click="addRow">Add Row</button>
-        <button @click="saveData">Save Data</button>
+        <button @click="addRow(1)">Add Row</button>
+        <button @click="saveData(1)">Save Data</button>
+      </div>
+    </div>
+
+    <div v-if="showModal2" class="modal">
+      <div class="modal-content">
+        <div>
+          <div><input type="date" id="date-selector-new" v-model="editDate" @change="onChangeDateModal(2)" /></div>
+          <div><button @click="closeModal(2)">X</button></div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Column 1</th>
+              <th>Column 2</th>
+              <th>Column 3</th>
+              <th>Column 4</th>
+              <th>Akce</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(row, index) in tableDataEdit" :key="index">
+              <td><input type="text" v-model="row.col1"></td>
+              <td><input type="text" v-model="row.col2"></td>
+              <td><input type="text" v-model="row.col3"></td>
+              <td><input type="text" v-model="row.col4"></td>
+              <td><button @click="removeRow(2, index)">Delete</button></td>
+            </tr>
+          </tbody>
+        </table>
+        <button @click="addRow(2)">Add Row</button>
+        <button @click="saveData(2)">Save Data</button>
       </div>
     </div>
 
@@ -51,7 +82,8 @@
         <table class="TreninkDay">
           <thead>
             <tr>
-              <th colspan="6">{{ getTraningDayHeader(day) }}</th>
+              <th colspan="5">{{ getTraningDayHeader(day) }}</th>
+              <th><button @click="showEditModal(day.definitionId, day.date)">Upravit trénink</button></th>
             </tr>
           </thead>
           <tr class="w3-blue">
@@ -81,16 +113,21 @@ export default {
       items: [],
       users: [],
       userId: 0,
+      editTreninkId: 0,
+      editTreninkDate: "",
       selectedDate: new Date().toISOString().substr(0, 10),
       selectedUser: '',
       showModal: false,
+      showModal2: false,
       newDate: new Date().toISOString().substr(0, 10),
+      editDate: new Date().toISOString().substr(0, 10),
       tableData: [
         { col1: "", col2: "", col3: "", col4: "" },
         { col1: "", col2: "", col3: "", col4: "" },
         { col1: "", col2: "", col3: "", col4: "" },
         { col1: "", col2: "", col3: "", col4: "" }
       ],
+      tableDataEdit: [],
       jsonData: []
     };
   },
@@ -133,19 +170,38 @@ export default {
         this.items = response.data;
       });
     },
-    onChangeNewDate() {
-      console.log(this.newDate);
+    onChangeDateModal(type) {
+      if(type === 1){ 
+        console.log(this.newDate);
+      }else 
+      if(type === 2){
+        console.log(this.editDate);
+      }
     },
-    addRow() {
-      this.tableData.push({ col1: "", col2: "", col3: "", col4: "" })
+    addRow(type) {
+      if (type === 1 ){
+        this.tableData.push({ col1: "", col2: "", col3: "", col4: "" });
+      }else
+      if (type === 2 ){
+        this.tableDataEdit.push({ col1: "", col2: "", col3: "", col4: "" });
+      }
     },
-    removeRow(index) {
+    removeRow(type, index) {
+      if (type === 1 ){
       if (this.tableData.length > 3) {
         this.tableData.splice(index, 1);
       }
+    }else
+    if (type === 2 ){
+      this.tableDataEdit.splice(index, 1);
+      if(this.tableDataEdit.length === 0){
+        this.tableDataEdit.push({ col1: "", col2: "", col3: "", col4: "" });
+      }
+    }
       console.log(index);
     },
-    saveData() {
+    saveData(type) {
+      if (type === 1 ){
       this.jsonData = JSON.stringify(this.tableData);
       console.log(this.jsonData);
       this.tableData = [
@@ -154,9 +210,29 @@ export default {
         { col1: "", col2: "", col3: "", col4: "" },
         { col1: "", col2: "", col3: "", col4: "" }
       ];
+    }else
+      if (type === 2){
+        this.jsonData = JSON.stringify(this.tableDataEdit);
+        console.log(this.jsonData);
+      }
     },
-    closeModal() {
-      this.showModal = false;
+    showEditModal(treninkId, treninkDate){
+      this.showModal2 = true;
+      this.editTreninkId = treninkId;
+      this.treninkDate = treninkDate;
+      this.editDate = treninkDate;
+      console.log(this.items);
+      this.tableDataEdit = this.items.find(x => x.definitionId === treninkId).definition;
+      console.log(this.tableDataEdit);
+      console.log("Trenink Id: " + treninkId + " Trenink Date: " + treninkDate);
+    },
+    closeModal(type) {
+      if (type === 1 ){
+        this.showModal = false;
+      }else
+      if (type === 2) {
+        this.showModal2 = false;
+      }
     },
     getResponseIcon(id) {
       if (id === 0) {

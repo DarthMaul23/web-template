@@ -2,17 +2,17 @@
   <div>
     <div>
       <div>
-        <button @click="decreaseDate" class="button">Předchozí týden</button>
+        <button @click="decreaseDate" class="button css-w3-blue">Předchozí týden</button>
         <label for="date-selector">Date:</label>
         <input type="date" id="date-selector" v-model="selectedDate" @change="onChangeDate" />
-        <button @click="increaseDate" class="button">Následující týden</button>
+        <button @click="increaseDate" class="button css-w3-blue">Následující týden</button>
       </div>
       <label for="user-selector">User:</label>
       <select id="user-selector" v-model="selectedUser">
         <option value="">All users</option>
         <option v-for="user in users" :value="user.id" :key="user.id">{{ user.name }}</option>
       </select>
-      <button @click="showModal = true" class="button">Nový trénink</button>
+      <button @click="showModal = true" class="button css-w3-blue">Nový trénink</button>
     </div>
     <div v-if="showModal" class="modal">
       <div class="modal-content">
@@ -36,12 +36,12 @@
               <td><input type="text" v-model="row.col2"></td>
               <td><input type="text" v-model="row.col3"></td>
               <td><input type="text" v-model="row.col4"></td>
-              <td><button @click="removeRow(1, index)">Delete</button></td>
+              <td><button @click="removeRow(1, index)" class="button css-w3-red">Delete</button></td>
             </tr>
           </tbody>
         </table>
-        <button @click="addRow(1)">Add Row</button>
-        <button @click="saveData(1)">Save Data</button>
+        <button @click="addRow(1)" class="button css-w3-orange">Add Row</button>
+        <button @click="saveData(1)" class="button css-w3-green">Save Data</button>
       </div>
     </div>
     <div v-if="showModal2" class="modal">
@@ -66,12 +66,12 @@
               <td><input type="text" v-model="row.col2"></td>
               <td><input type="text" v-model="row.col3"></td>
               <td><input type="text" v-model="row.col4"></td>
-              <td><button @click="removeRow(2, index)">Delete</button></td>
+              <td><button @click="removeRow(2, index)" class="button css-w3-red">Delete</button></td>
             </tr>
           </tbody>
         </table>
-        <button @click="addRow(2)">Add Row</button>
-        <button @click="saveData(2)">Save Data</button>
+        <button @click="addRow(2)" class="button css-w3-orange">Add Row</button>
+        <button @click="saveData(2)" class="button css-w3-green">Save Data</button>
       </div>
     </div>
     <tbody>
@@ -80,7 +80,7 @@
           <thead>
             <tr>
               <th colspan="5">{{ getTraningDayHeader(day) }}</th>
-              <th><button @click="showEditModal(day.definitionId, day.date)" class="button">Upravit</button></th>
+              <th><button @click="showEditModal(day.definitionId, day.date)" class="button css-w3-blue">Upravit</button></th>
             </tr>
           </thead>
           <tr class="w3-blue">
@@ -340,4 +340,21 @@ th {
   box-shadow: 0 5px #666;
   transform: translateY(4px);
 }
+
+.css-w3-blue {
+  background-color: #2196F3;
+}
+
+.css-w3-red {
+  background-color: #f32c21;
+}
+
+.css-w3-orange {
+  background-color: #f3a710;
+}
+
+.css-w3-green {
+  background-color: #6ce11e;
+}
+
 </style>

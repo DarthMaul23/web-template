@@ -1,7 +1,7 @@
 <template>
   <div class="listOfUsers">
     <input type="text" v-model="searchTerm" placeholder="Search by name or date">
-    <table>
+    <table class="table">
       <thead>
         <tr>
           <th>ID</th>
@@ -58,42 +58,36 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-table {
-    display: table;
-    border-collapse: separate;
-    box-sizing: border-box;
-    text-indent: initial;
-    border-spacing: 2px;
-    border-color: grey;
+.table {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
 }
 
-thead {
-    background: #0088f8;
-    font-family: Arial;
-    color: #ffffff;
-    font-size: 20px;
-    padding: 1px 10px 1px 10px;
-    text-decoration: none;
+.table th {
+  background-color: #2196F3;
+  color: #ffffff;
+  font-weight: bold;
+  text-align: left;
+  padding: 5px;
 }
 
-td {
-    display: table-cell;
-    vertical-align: inherit;
+.table td {
+  border: 1px solid #e5e5e5;
+  padding: 5px;
 }
 
-#tbodyA {
-    font-size: 20px;
-    height: 30px;
-    font-family: Arial;
-    color: black;
-    background-color: #f7f9fc;
+tbody tr:nth-child(even) {
+  background-color: #f5f5f5;
 }
 
-#tbodyB {
-    font-size: 20px;
-    height: 30px;
-    font-family: Arial;
-    color: black;
-    background-color: #e3e6ea;
+tbody tr:nth-child(odd) {
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
 <div>
-    <table>
+    <table class="table">
       <thead>
         <tr>
           <th>Property</th>
@@ -104,4 +104,36 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.table {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+}
+
+.table th {
+  background-color: #2196F3;
+  color: #ffffff;
+  font-weight: bold;
+  text-align: left;
+  padding: 5px;
+}
+
+.table td {
+  border: 1px solid #e5e5e5;
+  padding: 5px;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f5f5f5;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
 </style>

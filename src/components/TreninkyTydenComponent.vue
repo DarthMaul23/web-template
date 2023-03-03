@@ -2,19 +2,18 @@
   <div>
     <div>
       <div>
-        <button @click="decreaseDate">Předchozí týden</button>
+        <button @click="decreaseDate" class="button">Předchozí týden</button>
         <label for="date-selector">Date:</label>
         <input type="date" id="date-selector" v-model="selectedDate" @change="onChangeDate" />
-        <button @click="increaseDate">Následující týden</button>
+        <button @click="increaseDate" class="button">Následující týden</button>
       </div>
       <label for="user-selector">User:</label>
       <select id="user-selector" v-model="selectedUser">
         <option value="">All users</option>
         <option v-for="user in users" :value="user.id" :key="user.id">{{ user.name }}</option>
       </select>
-      <button @click="showModal = true">Nový trénink</button>
+      <button @click="showModal = true" class="button">Nový trénink</button>
     </div>
-
     <div v-if="showModal" class="modal">
       <div class="modal-content">
         <div>
@@ -45,7 +44,6 @@
         <button @click="saveData(1)">Save Data</button>
       </div>
     </div>
-
     <div v-if="showModal2" class="modal">
       <div class="modal-content">
         <div>
@@ -76,14 +74,13 @@
         <button @click="saveData(2)">Save Data</button>
       </div>
     </div>
-
     <tbody>
       <div v-for="day in items" :key="day.date">
         <table class="TreninkDay">
           <thead>
             <tr>
               <th colspan="5">{{ getTraningDayHeader(day) }}</th>
-              <th><button @click="showEditModal(day.definitionId, day.date)">Upravit trénink</button></th>
+              <th><button @click="showEditModal(day.definitionId, day.date)" class="button">Upravit</button></th>
             </tr>
           </thead>
           <tr class="w3-blue">
@@ -103,7 +100,6 @@
     </tbody>
   </div>
 </template>
-
 <script>
 import axios from 'axios';
 
@@ -140,6 +136,9 @@ export default {
     axios.get('/api/users').then(response => {
       this.users = response.data;
     });
+    const today = new Date();
+    const monday = new Date(today.setDate(today.getDate() - today.getDay() + 1));
+    this.selectedDate = monday.toISOString().slice(0,10);
   },
   methods: {
     getColor(id) {
@@ -148,7 +147,7 @@ export default {
     getTraningDayHeader(day) {
       var weekDays = ['Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota', 'Neděle'];
       var months = ['Leden', 'Únor', 'Březen', 'Duben', 'Květen', 'Červen', 'Červenec', 'Srpen', 'Září', 'Říjen', 'Listopad', 'Prosinec'];
-      return weekDays.at(day.dayOfWeek - 1) + " " + new Date(day.date).getDay() + ". " + months.at(new Date(day.date).getMonth()) + " " + new Date(day.date).getFullYear();
+      return weekDays.at(day.dayOfWeek - 1) + " " + new Date(day.date).getDate() + ". " + months.at(new Date(day.date).getMonth()) + " " + new Date(day.date).getFullYear();
     },
     onChangeDate() {
       console.log('Selected Date:', this.selectedDate);
@@ -233,10 +232,7 @@ export default {
       this.editTreninkId = treninkId;
       this.treninkDate = treninkDate;
       this.editDate = treninkDate;
-      console.log(this.items);
       this.tableDataEdit = this.itemsEdit.find(x => x.definitionId === treninkId).definition;
-      console.log(this.tableDataEdit);
-      console.log("Trenink Id: " + treninkId + " Trenink Date: " + treninkDate);
     },
     closeModal(type) {
       if (type === 1) {
@@ -320,5 +316,28 @@ th {
   background: transparent;
   border: none;
   cursor: pointer;
+}
+
+.button {
+  background-color: #2196F3;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 4px;
+}
+
+.button:hover {
+  background-color: #0b7dda;
+  cursor: pointer;
+}
+
+.button:active {
+  background-color: #0b7dda;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
 }
 </style>

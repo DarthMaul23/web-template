@@ -322,7 +322,11 @@ th {
   background-color: #2196F3;
   color: white;
   border: none;
-  padding: 10px 20px;
+  padding: 5px 10px;
+  margin-top: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-bottom: 5px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
@@ -349,12 +353,24 @@ th {
   background-color: #f32c21;
 }
 
+.css-w3-red:hover {
+  background-color: #d44a43;
+}
+
 .css-w3-orange {
   background-color: #f3a710;
 }
 
+.css-w3-orange:hover {
+  background-color: #b3904a;
+}
+
 .css-w3-green {
   background-color: #6ce11e;
+}
+
+.css-w3-green:hover {
+  background-color: #83bc5c;
 }
 
 </style>

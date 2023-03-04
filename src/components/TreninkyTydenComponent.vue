@@ -16,9 +16,9 @@
     </div>
     <div v-if="showModal" class="modal">
       <div class="modal-content">
-        <div>
-          <div><input type="date" id="date-selector-new" v-model="newDate" @change="onChangeDateModal(1)" /></div>
-          <div><button @click="closeModal(1)">X</button></div>
+        <div class="container">
+          <input class="centered-input" type="date" id="date-selector-new" v-model="newDate" @change="onChangeDateModal(1)" />
+          <button class="right-button" @click="closeModal(1)">X</button>
         </div>
         <table>
           <thead>
@@ -46,9 +46,9 @@
     </div>
     <div v-if="showModal2" class="modal">
       <div class="modal-content">
-        <div>
-          <div><input type="date" id="date-selector-new" v-model="editDate" @change="onChangeDateModal(2)" /></div>
-          <div><button @click="closeModal(2)">X</button></div>
+        <div class="container">
+          <input class="centered-input" type="date" id="date-selector-new" v-model="editDate" @change="onChangeDateModal(2)" />
+          <button class="right-button" @click="closeModal(2)">X</button>
         </div>
         <table>
           <thead>
@@ -302,6 +302,29 @@ td {
 
 th {
   background-color: #f2f2f2;
+}
+
+.container {
+  display: flex;
+  align-items: center; /* align items vertically */
+  justify-content: space-between; /* align items horizontally with space between */
+  padding: 10px;
+  background-color: #f2f2f2;
+}
+
+.centered-input {
+  flex: 1; /* take up remaining space */
+  text-align: center; /* center the input text */
+  margin-right: 10px; /* add some spacing to the right of the input */
+}
+
+.right-button {
+  background-color: #b3b3b3;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
 .close-button {

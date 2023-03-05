@@ -23,6 +23,7 @@
         <table>
           <thead>
             <tr>
+              <th></th>
               <th>Column 1</th>
               <th>Column 2</th>
               <th>Column 3</th>
@@ -32,6 +33,7 @@
           </thead>
           <tbody>
             <tr v-for="(row, index) in tableData" :key="index">
+              <td>{{ index + 1 }}</td>
               <td><input type="text" v-model="row.col1"></td>
               <td><input type="text" v-model="row.col2"></td>
               <td><input type="text" v-model="row.col3"></td>
@@ -53,6 +55,7 @@
         <table>
           <thead>
             <tr>
+              <th></th>
               <th>Column 1</th>
               <th>Column 2</th>
               <th>Column 3</th>
@@ -62,6 +65,7 @@
           </thead>
           <tbody>
             <tr v-for="(row, index) in tableDataEdit" :key="index">
+              <td>{{ index + 1 }}</td>
               <td><input type="text" v-model="row.col1"></td>
               <td><input type="text" v-model="row.col2"></td>
               <td><input type="text" v-model="row.col3"></td>

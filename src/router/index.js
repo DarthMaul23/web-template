@@ -4,6 +4,7 @@ import TreninkView from '../views/TreninkView.vue'
 import LoginView from '../views/LoginView.vue'
 import DetailView from '../views/DetailView.vue'
 import NewUserView from '../views/NewUserView.vue'
+import CalendarView from '../views/CalendarView.vue'
 
 const routes = [
   {
@@ -35,6 +36,11 @@ const routes = [
     path: '/newUser',
     name: 'newUser',
     component: NewUserView
+  },
+  {
+    path: '/calendar/:id',
+    name: 'calendar',
+    component: CalendarView
   },
   {
     path: '/about',

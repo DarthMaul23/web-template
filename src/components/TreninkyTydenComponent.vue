@@ -123,10 +123,7 @@ export default {
       newDate: new Date().toISOString().substr(0, 10),
       editDate: new Date().toISOString().substr(0, 10),
       tableData: [
-        { id: 1, col1: "", col2: "", col3: "", col4: "" },
-        { id: 2, col1: "", col2: "", col3: "", col4: "" },
-        { id: 3, col1: "", col2: "", col3: "", col4: "" },
-        { id: 4, col1: "", col2: "", col3: "", col4: "" }
+        { id: 1, col1: "", col2: "", col3: "", col4: "" }
       ],
       tableDataEdit: [],
       jsonData: []
@@ -154,7 +151,6 @@ export default {
       return weekDays.at(day.dayOfWeek - 1) + " " + new Date(day.date).getDate() + ". " + months.at(new Date(day.date).getMonth()) + " " + new Date(day.date).getFullYear();
     },
     onChangeDate() {
-      console.log('Selected Date:', this.selectedDate);
       this.getListOfTrainingDays();
     },
     decreaseDate() {
@@ -170,19 +166,17 @@ export default {
       this.getListOfTrainingDays();
     },
     getListOfTrainingDays() {
-      console.log(this.userId);
       axios.get('https://localhost:7210/get-Training-Week?id=' + this.userId + '&date=' + this.selectedDate).then(response => {
-        console.log(response.data);
         this.items = response.data;
         this.itemsEdit = response.data;
       });
     },
     onChangeDateModal(type) {
       if (type === 1) {
-        console.log(this.newDate);
+        // console.log(this.newDate);
       } else
         if (type === 2) {
-          console.log(this.editDate);
+          // console.log(this.editDate);
         }
     },
     addRow(type) {
@@ -195,7 +189,7 @@ export default {
     },
     removeRow(type, index) {
       if (type === 1) {
-        if (this.tableData.length > 3) {
+        if (this.tableData.length > 1) {
           this.tableData.splice(index, 1);
         }
       } else
@@ -205,7 +199,6 @@ export default {
             this.tableDataEdit.push({ id: this.tableData.length + 1, col1: "", col2: "", col3: "", col4: "" });
           }
         }
-      console.log(index);
     },
     async saveData(type) {
       if (type === 1) {
@@ -216,20 +209,25 @@ export default {
         }
 
         let data = { definitions: this.tableData, responses: responses };
-        console.log("Data: " + JSON.stringify(data));
 
         this.tableData = [
           { id: 0, col1: "", col2: "", col3: "", col4: "" },
-          { id: 1, col1: "", col2: "", col3: "", col4: "" },
-          { id: 2, col1: "", col2: "", col3: "", col4: "" },
-          { id: 3, col1: "", col2: "", col3: "", col4: "" }
         ];
-        await axios.post('https://localhost:7210/create-Training', this.userId, this.newDate, 1, JSON.stringify(data));
+        await axios.post(`https://localhost:7210/create-Training?userId=${this.userId}&date=${this.newDate}&type=1`, data);
       } else
         if (type === 2) {
-          this.jsonData = JSON.stringify(this.tableDataEdit);
-          console.log(this.jsonData);
+          await this.updateTraining();
         }
+    },
+    async updateTraining() {
+      if (this.showModal2) {
+        let responses = [];
+        for (let i = 0; i < this.tableDataEdit.length; i++) {
+          responses.push({ type: 0 });
+        }
+        let data = { definitions: this.tableDataEdit, responses: responses };
+        await axios.put(`https://localhost:7210/update-Training?treninkId=${this.editTreninkId}&type=1`, data);
+      }
     },
     showEditModal(treninkId, treninkDate) {
       this.showModal2 = true;
@@ -241,9 +239,13 @@ export default {
     closeModal(type) {
       if (type === 1) {
         this.showModal = false;
+        this.tableData = [
+          { id: 0, col1: "", col2: "", col3: "", col4: "" }
+        ];
       } else
         if (type === 2) {
           this.showModal2 = false;
+          this.getListOfTrainingDays();
         }
     },
     getResponseIcon(id) {

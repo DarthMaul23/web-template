@@ -24,6 +24,7 @@
     </table>
   </div>
 </template>
+
 <script>
 export default {
   data() {
@@ -69,20 +70,16 @@ export default {
     calendarRows() {
       const rows = [];
       let currentTime = this.startTime;
-      console.log(this.startTime);
-      console.log(this.endTime);
       while (currentTime <= this.endTime) {
         rows.push({ time: currentTime });
         currentTime = this.addMinutes(currentTime, this.timeInterval);
       }
-      console.log(rows);
       return rows;
     },
-    filteredEvents: function () {
-      const self = this;
-      return function (day, row) {
-        return self.events.filter(function (event) {
-          return event.startDay === day && self.isEventInRange(event, row);
+    filteredEvents() {
+      return (day, row) => {
+        return this.events.filter((event) => {
+          return event.startDay === day && this.isEventInRange(event, row);
         });
       };
     },
@@ -94,11 +91,7 @@ export default {
       timeInMins += minutes;
       let newHours = Math.floor(timeInMins / 60);
       let newMins = timeInMins % 60;
-
-      console.log(newHours.toString().slice(0, -2));
-      console.log(newMins);
-
-      return `${newHours.toString().slice(0, -2)}:${newMins
+      return `${newHours.toString().padStart(2, "0")}:${newMins
         .toString()
         .padStart(2, "0")}`;
     },
@@ -118,45 +111,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.calendar {
-  font-family: sans-serif;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th {
-  background-color: #f5f5f5;
-  font-weight: bold;
-}
-
-td {
-  padding: 5px;
-  border: 1px solid #ccc;
-}
-
-.event {
-  background-color: #2196f3;
-  color: #fff;
-  padding: 10px;
-}
-
-td {
-  padding: 5px;
-  border: 1px solid #ccc;
-}
-
-.event {
-  background-color: #2196f3;
-  color: #fff;
-  padding: 5px;
-  margin-bottom: 5px;
-  border-radius: 5px;
-  font-size: 14px;
-}
-</style>
-

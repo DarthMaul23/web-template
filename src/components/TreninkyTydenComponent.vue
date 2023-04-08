@@ -17,7 +17,7 @@
     <div v-if="showModal" class="modal">
       <div class="modal-content">
         <div class="container">
-          <input class="centered-input" type="date" id="date-selector-new" v-model="newDate" @change="onChangeDateModal(1)" />
+          <input class="centered-input" type="date" id="date-selector-new" v-model="newDate" />
           <button class="right-button" @click="closeModal(1)">X</button>
         </div>
         <table>
@@ -49,7 +49,7 @@
     <div v-if="showModal2" class="modal">
       <div class="modal-content">
         <div class="container">
-          <input class="centered-input" type="date" id="date-selector-new" v-model="editDate" @change="onChangeDateModal(2)" />
+          <input class="centered-input" type="date" id="date-selector-new" v-model="editDate" />
           <button class="right-button" @click="closeModal(2)">X</button>
         </div>
         <table>
@@ -171,14 +171,6 @@ export default {
         this.itemsEdit = response.data;
       });
     },
-    onChangeDateModal(type) {
-      if (type === 1) {
-        // console.log(this.newDate);
-      } else
-        if (type === 2) {
-          // console.log(this.editDate);
-        }
-    },
     addRow(type) {
       if (type === 1) {
         this.tableData.push({ id: this.tableData.length + 1, col1: "", col2: "", col3: "", col4: "" });
@@ -202,13 +194,15 @@ export default {
     },
     async saveData(type) {
       if (type === 1) {
-        let responses = [];
+        let _responses = [];
 
         for (let i = 0; i < this.tableData.length; i++) {
-          responses.push({ type: 0 });
+          _responses.push({ response: 0 });
         }
 
-        let data = { definitions: this.tableData, responses: responses };
+        let data = { definitions: this.tableData, responses: _responses };
+
+        console.log(data);
 
         this.tableData = [
           { id: 0, col1: "", col2: "", col3: "", col4: "" },
@@ -401,5 +395,4 @@ th {
 .css-w3-green:hover {
   background-color: #83bc5c;
 }
-
 </style>

@@ -24,7 +24,7 @@
             <table>
               <tr>
                 <td>
-                  <span>Uživatel: <strong></strong></span>
+                  <span>Uživatel: <strong>{{ getUserName() }}</strong></span>
                 </td>
                 <td>
                   <a @click.prevent="logout" class="w3-bar-item w3-button "><i class="fa fa-close"></i></a>
@@ -95,6 +95,10 @@ export default {
     logout(){
       localStorage.clear()
       this.$router.push('/login')
+    },
+    getUserName(){
+      console.log(localStorage.getItem("user"));
+      return localStorage.getItem("user")+"HHHH";
     }
   }
 }

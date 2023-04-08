@@ -34,10 +34,10 @@
           <tbody>
             <tr v-for="(row, index) in tableData" :key="index">
               <td>{{ index + 1 }}</td>
-              <td><input type="text" v-model="row.col1"></td>
-              <td><input type="text" v-model="row.col2"></td>
-              <td><input type="text" v-model="row.col3"></td>
-              <td><input type="text" v-model="row.col4"></td>
+              <td><input type="text" class="cell-input" v-model="row.col1"></td>
+              <td><input type="text" class="cell-input" v-model="row.col2"></td>
+              <td><input type="text" class="cell-input" v-model="row.col3"></td>
+              <td><input type="text" class="cell-input" v-model="row.col4"></td>
               <td><button @click="removeRow(1, index)" class="button css-w3-red">Delete</button></td>
             </tr>
           </tbody>
@@ -66,10 +66,10 @@
           <tbody>
             <tr v-for="(row, index) in tableDataEdit" :key="index">
               <td>{{ index + 1 }}</td>
-              <td><input type="text" v-model="row.col1"></td>
-              <td><input type="text" v-model="row.col2"></td>
-              <td><input type="text" v-model="row.col3"></td>
-              <td><input type="text" v-model="row.col4"></td>
+              <td><input type="text" class="cell-input" v-model="row.col1"></td>
+              <td><input type="text" class="cell-input" v-model="row.col2"></td>
+              <td><input type="text" class="cell-input" v-model="row.col3"></td>
+              <td><input type="text" class="cell-input" v-model="row.col4"></td>
               <td><button @click="removeRow(2, index)" class="button css-w3-red">Delete</button></td>
             </tr>
           </tbody>
@@ -84,14 +84,14 @@
           <thead>
             <tr>
               <th colspan="5">{{ getTraningDayHeader(day) }}</th>
-              <th><button @click="showEditModal(day.definitionId, day.date)" class="button css-w3-blue">Upravit</button></th>
+              <th><button @click="showEditModal(day.trainingId, day.date)" class="button css-w3-blue">Upravit</button></th>
             </tr>
           </thead>
           <tr class="w3-blue">
             <td colspan="6"></td>
           </tr>
           <tr v-for="item in day.definition" :key="item.id" :class="!getColor(item.id) ? 'even' : ''">
-            <td :width="20">{{ day.definition.indexOf(item) + 1 }}</td>
+            <td>{{ day.definition.indexOf(item) + 1 }}</td>
             <td>{{ item.col1 }}</td>
             <td>{{ item.col2 }}</td>
             <td>{{ item.col3 }}</td>
@@ -202,16 +202,18 @@ export default {
 
         let data = { definitions: this.tableData, responses: _responses };
 
-        console.log(data);
-
         this.tableData = [
           { id: 0, col1: "", col2: "", col3: "", col4: "" },
         ];
+
         await axios.post(`https://localhost:7210/create-Training?userId=${this.userId}&date=${this.newDate}&type=1`, data);
       } else
         if (type === 2) {
           await this.updateTraining();
         }
+      
+        this.getListOfTrainingDays();
+
     },
     async updateTraining() {
       if (this.showModal2) {
@@ -223,12 +225,12 @@ export default {
         await axios.put(`https://localhost:7210/update-Training?treninkId=${this.editTreninkId}&type=1`, data);
       }
     },
-    showEditModal(treninkId, treninkDate) {
+    showEditModal(trainingId, treninkDate) {
       this.showModal2 = true;
-      this.editTreninkId = treninkId;
+      this.editTreninkId = trainingId;
       this.treninkDate = treninkDate;
       this.editDate = treninkDate;
-      this.tableDataEdit = this.itemsEdit.find(x => x.definitionId === treninkId).definition;
+      this.tableDataEdit = this.itemsEdit.find(x => x.trainingId === trainingId).definition;
     },
     closeModal(type) {
       if (type === 1) {
@@ -302,6 +304,15 @@ td {
 
 th {
   background-color: #f2f2f2;
+}
+
+.cell-input {
+  width: 100%;
+  height: 100%;
+  background: none;
+  border: none;
+  box-shadow: none;
+  font-size: inherit;
 }
 
 .container {

@@ -6,6 +6,7 @@
         <label for="date-selector">Date:</label>
         <input type="date" id="date-selector" v-model="selectedDate" @change="onChangeDate" />
         <button @click="increaseDate" class="button css-w3-blue">Následující týden</button>
+        <button @click="getTrainingPlanPDF" target="_blank" class="button css-w3-blue" style="align-self: right;">Tisk</button>
       </div>
       <label for="user-selector">User:</label>
       <select id="user-selector" v-model="selectedUser">
@@ -113,7 +114,7 @@ export default {
       items: [],
       itemsEdit: [],
       users: [],
-      userId: 2,
+      userId: 1,
       editTreninkId: 0,
       editTreninkDate: "",
       selectedDate: new Date().toISOString().substr(0, 10),
@@ -166,9 +167,26 @@ export default {
       this.getListOfTrainingDays();
     },
     getListOfTrainingDays() {
-      axios.get('https://localhost:7210/get-Training-Week?id=' + this.userId + '&date=' + this.selectedDate).then(response => {
+      axios.get('https://treninkovy-denik-api.azurewebsites.net/get-Training-Week?id=' + this.userId + '&date=' + this.selectedDate).then(response => {
         this.items = response.data;
         this.itemsEdit = response.data;
+      });
+    },
+    async getTrainingPlanPDF() {
+      await axios.get('https://treninkovy-denik-api.azurewebsites.net/get-Training-WeekPDF?id=' + this.userId + '&date=' + this.selectedDate, {
+        responseType: 'blob',
+      })
+      .then(response => {
+        const fileURL = window.URL.createObjectURL(new Blob([response.data]));
+        const fileWindow = window.open(fileURL);
+        
+        if (!fileWindow) {
+          alert('Please disable your popup blocker and try again.');
+        }
+      })
+      .catch(error => {
+        console.error(error);
+        alert('Failed to generate PDF file.');
       });
     },
     addRow(type) {
@@ -206,7 +224,10 @@ export default {
           { id: 0, col1: "", col2: "", col3: "", col4: "" },
         ];
 
-        await axios.post(`https://localhost:7210/create-Training?userId=${this.userId}&date=${this.newDate}&type=1`, data);
+        console.log(this.userId);
+
+        await axios.post(`https://treninkovy-denik-api.azurewebsites.net/create-Training?userId=${this.userId}&date=${this.newDate}&type=1`, data);
+        //await axios.post(`https://localhost:7210/create-Training?userId=${this.userId}&date=${this.newDate}&type=1`, data);
       } else
         if (type === 2) {
           await this.updateTraining();
@@ -222,7 +243,7 @@ export default {
           responses.push({ type: 0 });
         }
         let data = { definitions: this.tableDataEdit, responses: responses };
-        await axios.put(`https://localhost:7210/update-Training?treninkId=${this.editTreninkId}&type=1`, data);
+        await axios.put(`https://treninkovy-denik-api.azurewebsites.net/update-Training?treninkId=${this.editTreninkId}&type=1`, data);
       }
     },
     showEditModal(trainingId, treninkDate) {

@@ -25,7 +25,7 @@ export default {
   methods: {
     async submitForm() {
       try {
-        await axios.post('https://localhost:7210/user-Login', {
+        await axios.post('https://treninkovy-denik-api.azurewebsites.net/user-Login', {
           userName: this.username,
           userPassword: this.password
         }).then((response) => {

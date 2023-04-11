@@ -1,5 +1,5 @@
 <template>
-  <div class="NewUserView">
+  <div class="ActivityView">
     <title>Atletika-denik</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -67,18 +67,11 @@
             >
           </router-link>
           <router-link :to="{ name: 'trainingWeek' }">
-            <a
-              href="atlet_add.php"
-              class="w3-bar-item w3-button w3-padding w3-blue"
-              >TRENINKY</a
-            >
+            <a class="w3-bar-item w3-button"> TRENINKY </a>
           </router-link>
           <router-link :to="{ name: 'activity' }">
-            <a class="w3-bar-item w3-button">Aktivity</a>
+            <a class="w3-bar-item w3-button w3-padding w3-blue">Aktivity</a>
           </router-link>
-          <!--<a href="athlet_page.php?id=" class="w3-bar-item w3-button w3-padding">INFORMACE</a>
-            <a href="treninky.php?id=" class="w3-bar-item w3-button w3-padding">TRENINKY</a>
-            <a href="rekordy.php?id=&&jmeno=&&prijmeni="class="w3-bar-item w3-button w3-padding">REKORDY</a>-->
         </div>
       </nav>
 
@@ -96,7 +89,7 @@
         <!-- Header -->
         <header class="w3-container" style="padding-top: 22px">
           <div>
-            <TreninkyTydenComponent />
+            <ActivityListComponent />
           </div>
         </header>
 
@@ -112,12 +105,12 @@
 </template>
 <script>
 // @ is an alias to /src
-import TreninkyTydenComponent from "@/components/TreninkyTydenComponent.vue";
+import ActivityListComponent from "@/components/ActivityListComponent.vue";
 
 export default {
-  name: "TreninkView",
+  name: "ActivityView",
   components: {
-    TreninkyTydenComponent,
+    ActivityListComponent,
   },
   mounted() {
     if (localStorage.getItem("user") == null) {

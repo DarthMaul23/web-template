@@ -5,6 +5,7 @@ import LoginView from '../views/LoginView.vue'
 import DetailView from '../views/DetailView.vue'
 import NewUserView from '../views/NewUserView.vue'
 import CalendarView from '../views/CalendarView.vue'
+import ActivityView from '../views/ActivityView.vue'
 
 const routes = [
   {
@@ -36,6 +37,11 @@ const routes = [
     path: '/newUser',
     name: 'newUser',
     component: NewUserView
+  },
+  {
+    path: '/activity/:id',
+    name: 'activity',
+    component: ActivityView
   },
   {
     path: '/calendar/:id',

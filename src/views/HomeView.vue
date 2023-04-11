@@ -44,9 +44,6 @@
           <router-link :to="{ name: 'newUser'}">
           <a href="atlet_add.php" class="w3-bar-item w3-button">PŘIDAT ATLETA</a>
         </router-link>
-          <!--<a href="athlet_page.php?id=" class="w3-bar-item w3-button w3-padding">INFORMACE</a>
-            <a href="treninky.php?id=" class="w3-bar-item w3-button w3-padding">TRENINKY</a>
-            <a href="rekordy.php?id=&&jmeno=&&prijmeni="class="w3-bar-item w3-button w3-padding">REKORDY</a>-->
         </div>
       </nav>
 

@@ -47,19 +47,20 @@
         {{ pageNumber }}
       </button>
     </div>
-    <div v-if="showModal" class="modal">
-      <div class="modal-content">
-        <div class="container">
-          <button style="align: right;" @click="showModal = false">X</button>
-        </div>
-      </div>
-    </div>
+    <ModalComponent :show-modal="showModal" header-color="#3399ff" title="Nová aktivita" @close="showModal = false">
+      <p>This is the content of my modal</p>
+    </ModalComponent>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import ModalComponent from "@/components/ModalComponent.vue";
+
 export default {
+  components: {
+    ModalComponent,
+  },
   data() {
     return {
       showModal: false,

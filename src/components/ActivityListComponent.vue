@@ -9,7 +9,7 @@
           {{ option }}
         </option>
       </select>
-      <button @click="showModal = true">Nová Aktivita</button>
+      <button @click="showModal = true" class="button">Nová Aktivita</button>
     </div>
     <table class="table">
       <thead>
@@ -31,24 +31,29 @@
           <td>{{ truncatedDescription(item.description) }}</td>
           <td>
             <router-link :to="{ name: 'detail', params: { id: item.id } }">
-              <button>Details</button>
+              <button class="button css-w3-orange">Details</button>
             </router-link>
           </td>
         </tr>
       </tbody>
     </table>
     <div class="pagination">
-      <button
+      <a
         v-for="pageNumber in numberOfPages"
         :key="pageNumber"
         @click="currentPage = pageNumber"
         class="pageNo"
       >
         {{ pageNumber }}
-      </button>
+    </a>
     </div>
-    <ModalComponent :show-modal="showModal" header-color="#3399ff" title="Nová aktivita" @close="showModal = false">
-      <p>This is the content of my modal</p>
+    <ModalComponent
+      :show-modal="showModal"
+      header-color="#3399ff"
+      title="Nová aktivita"
+      @close="showModal = false"
+    >
+      <NewTagFormComponent />
     </ModalComponent>
   </div>
 </template>
@@ -56,10 +61,12 @@
 <script>
 import axios from "axios";
 import ModalComponent from "@/components/ModalComponent.vue";
+import NewTagFormComponent from "@/components/NewTagFormComponent.vue";
 
 export default {
   components: {
     ModalComponent,
+    NewTagFormComponent,
   },
   data() {
     return {
@@ -130,8 +137,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.filter{
-  padding:20px;
+.filter {
+  padding: 20px;
   padding-left: 10px;
 }
 
@@ -196,4 +203,30 @@ tbody tr:nth-child(odd) {
   width: 80%;
 }
 
+.button {
+  background-color: #2196f3;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  margin-top: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 4px;
+}
+
+.button:hover {
+  background-color: #0b7dda;
+  cursor: pointer;
+}
+
+.button:active {
+  background-color: #0b7dda;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
 </style>

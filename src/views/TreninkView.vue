@@ -130,8 +130,7 @@ export default {
       this.$router.push('/login')
     },
     getUserName(){
-      console.log(localStorage.getItem("user"));
-      return localStorage.getItem("user")+"HHHH";
+      return localStorage.getItem("user");
     }
   }
 };

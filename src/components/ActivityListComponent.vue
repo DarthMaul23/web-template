@@ -53,7 +53,7 @@
       title="Nová aktivita"
       @close="showModal = false"
     >
-      <NewTagFormComponent />
+      <NewTagFormComponent :list-of-users="listOfUsers" />
     </ModalComponent>
   </div>
 </template>
@@ -77,13 +77,15 @@ export default {
       currentPage: 1,
       itemsPerPage: 50,
       options: [25, 50, 75, 100],
+      listOfUsers:[],
     };
   },
   mounted() {
     if (localStorage.getItem("user") == null) {
       this.$router.push("/login");
     }
-
+    console.log(localStorage.user);
+    this.getListOfUsers();
     this.getActivities();
     this.getNumberOfPages();
   },
@@ -105,6 +107,20 @@ export default {
     },
   },
   methods: {
+    getListOfUsers(){
+      axios
+        .get(
+          `https://localhost:7210/get-Users-For-Trainer?trenerName=${localStorage.user}`
+        )
+        .then((response) => {
+          response.data.forEach(item => {
+            this.listOfUsers.push({id: item.id, name: item.userName});
+          });
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
     getActivities() {
       axios
         .get(

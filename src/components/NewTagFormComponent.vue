@@ -33,7 +33,10 @@
           <tr>
             <th>Id</th>
             <th>Uživatel</th>
-            <th>Opakování:</th>
+            <th>Opakování</th>
+            <th v-if="form.selectedUsers.some(item => item.repetition!==undefined || '' || 'daily')">
+              Parametr
+            </th>
             <th>Od:</th>
             <th>Do:</th>
             <th>Sloupec</th>
@@ -44,10 +47,33 @@
             <td>{{ item.name }}</td>
             <td>
               <select id="repetition" v-model="item.repetition">
-                <option value="daily">Daily</option>
-                <option value="weekly">Weekly</option>
-                <option value="biweekly">Every two weeks</option>
-                <option value="monthly">Monthly</option>
+                <option value="daily">Denní</option>
+                <option value="weekly">Týdení</option>
+                <option value="biweekly">Ob týden</option>
+                <option value="monthly">Měsíční</option>
+              </select>
+            </td>
+            <td>
+              <select v-if="item.repetition === 'weekly'" id="weekDay" v-model="item.weekDay">
+                <option value="1">Pondělí</option>
+                <option value="2">Úterý</option>
+                <option value="3">Středa</option>
+                <option value="4">Čtvrtek</option>
+                <option value="5">Pátek</option>
+                <option value="6">Sobota</option>
+                <option value="7">Neděle</option>
+              </select>
+              <select v-if="item.repetition === 'biweekly'" id="weekDay" v-model="item.byWeekly">
+                <option value="1">Pondělí</option>
+                <option value="2">Úterý</option>
+                <option value="3">Středa</option>
+                <option value="4">Čtvrtek</option>
+                <option value="5">Pátek</option>
+                <option value="6">Sobota</option>
+                <option value="7">Neděle</option>
+              </select>
+              <select v-if="item.repetition === 'monthly'" id="dayOfMonth" v-model="item.monthly">
+                <option v-for="i in 31" :key="i" :value="i">{{ i }}</option>
               </select>
             </td>
             <td>
@@ -85,8 +111,15 @@
 
 <script>
 import SearchDropdown from "@/components/MinorComponents/SearchDropdown.vue";
+import axios from "axios";
 
 export default {
+  props: {
+      listOfUsers: {
+        type: [],
+        required: true,
+      },
+  },
   components: {
     SearchDropdown,
   },
@@ -95,25 +128,17 @@ export default {
       form: {
         name: "",
         color: "#ffffff",
-        from: "",
-        to: "",
-        repetition: "daily",
         description: "",
         selectedUsers: [],
       },
-      users: [
-        { id: 1, name: "User 1" },
-        { id: 2, name: "User 2" },
-        { id: 3, name: "User 3" },
-        { id: 4, name: "User 4" },
-        { id: 5, name: "User 5" },
-      ],
+      users: this.listOfUsers,
       search: "",
     };
   },
   methods: {
     submitForm() {
       console.log(this.form);
+      axios.post(`https://localhost:7210/create-New-Activity?name=${this.form.name}&color=${this.form.color}&description=${this.form.description}`, this.form.selectedUsers)
       // Handle form submission here
     },
     updateSelectedItems(newSelectedItems) {

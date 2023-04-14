@@ -95,7 +95,7 @@ export default {
     },
     getUserName(){
       console.log(localStorage.getItem("user"));
-      return localStorage.getItem("user")+"HHHH";
+      return localStorage.getItem("user");
     }
   }
 }

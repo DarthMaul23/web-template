@@ -126,6 +126,14 @@
         Save Data
       </button>
     </ModalComponent>
+    <ModalComponent
+      :show-modal="showModal3"
+      header-color="#3399ff"
+      title="Detail Aktivity"
+      @close="showModal3 = false"
+    >
+    <tag-detail :id="tagId"/>
+  </ModalComponent>
     <tbody>
       <div v-for="day in items" :key="day.date">
         <table class="TreninkDay">
@@ -142,8 +150,13 @@
               </th>
             </tr>
           </thead>
+          <tr v-if="day.activity.length > 0 " class="w3-blue"><td colspan="6"><b>Aktivity</b></td></tr>
+          <tr v-for="item in day.activity" :key="item.id">
+            <td>{{ day.activity.indexOf(item)+1}}</td>
+            <td><a class="tag" @click="showDetailModal(item.id)">{{ item.name }}</a></td>
+          </tr>
           <tr class="w3-blue">
-            <td colspan="6"></td>
+            <td colspan="6"><b>Instrukce</b></td>
           </tr>
           <tr
             v-for="item in day.definition"
@@ -151,10 +164,10 @@
             :class="!getColor(item.id) ? 'even' : ''"
           >
             <td>{{ day.definition.indexOf(item) + 1 }}</td>
-            <td>{{ item.col1 }}</td>
-            <td>{{ item.col2 }}</td>
-            <td>{{ item.col3 }}</td>
-            <td>{{ item.col4 }}</td>
+            <td>{{ getTagOrText(item.col1) }}</td>
+            <td>{{ getTagOrText(item.col2) }}</td>
+            <td>{{ getTagOrText(item.col3) }}</td>
+            <td>{{ getTagOrText(item.col4) }}</td>
             <td :width="40">
               <img
                 :src="
@@ -175,10 +188,13 @@
 <script>
 import axios from "axios";
 import ModalComponent from "@/components/ModalComponent.vue";
+import TagDetail from './MinorComponents/TagDetail.vue';
+import * as Api from "../API/api";
 
 export default {
   components: {
     ModalComponent,
+    TagDetail,
   },
   data() {
     return {
@@ -186,12 +202,14 @@ export default {
       itemsEdit: [],
       users: [],
       userId: 1,
+      tagId: "",
       editTreninkId: 0,
       editTreninkDate: "",
       selectedDate: new Date().toISOString().substr(0, 10),
       selectedUser: "",
       showModal: false,
       showModal2: false,
+      showModal3: false,
       newDate: new Date().toISOString().substr(0, 10),
       editDate: new Date().toISOString().substr(0, 10),
       tableData: [{ id: 1, col1: "", col2: "", col3: "", col4: "" }],
@@ -264,18 +282,10 @@ export default {
       this.selectedDate = newDate.toISOString().substr(0, 10);
       this.getListOfTrainingDays();
     },
-    getListOfTrainingDays() {
-      axios
-        .get(
-          "https://treninkovy-denik-api.azurewebsites.net/get-Training-Week?id=" +
-            this.userId +
-            "&date=" +
-            this.selectedDate
-        )
-        .then((response) => {
-          this.items = response.data;
-          this.itemsEdit = response.data;
-        });
+    async getListOfTrainingDays() {
+        let data = await Api.getTrainingWeek(this.userId, this.selectedDate);
+        this.items = data;
+        this.itemsEdit = data;
     },
     async getTrainingPlanPDF() {
       await axios
@@ -350,13 +360,8 @@ export default {
 
         this.tableData = [{ id: 0, col1: "", col2: "", col3: "", col4: "" }];
 
-        console.log(this.userId);
+        await Api.createNewTraining(this.userId, this.newDate, data);
 
-        await axios.post(
-          `https://treninkovy-denik-api.azurewebsites.net/create-Training?userId=${this.userId}&date=${this.newDate}&type=1`,
-          data
-        );
-        //await axios.post(`https://localhost:7210/create-Training?userId=${this.userId}&date=${this.newDate}&type=1`, data);
       } else if (type === 2) {
         await this.updateTraining();
       }
@@ -370,11 +375,22 @@ export default {
           responses.push({ type: 0 });
         }
         let data = { definitions: this.tableDataEdit, responses: responses };
-        await axios.put(
-          `https://treninkovy-denik-api.azurewebsites.net/update-Training?treninkId=${this.editTreninkId}&type=1`,
-          data
-        );
+
+        await Api.editTraining(this.editTreninkId, data);
       }
+    },
+    getTagOrText(value) {
+      if (this.isGuid(value)) {
+        // return "<p=>Testovací Tag</p>";
+        let tag = `<button onclick="openModal('${value}')">Open Modal</button>`;
+        return tag.outerHTML;
+      }
+      return value;
+    },
+    isGuid(str) {
+      const guidRegex =
+        /^[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}$/;
+      return guidRegex.test(str);
     },
     showEditModal(trainingId, treninkDate) {
       this.showModal2 = true;
@@ -384,6 +400,10 @@ export default {
       this.tableDataEdit = this.itemsEdit.find(
         (x) => x.trainingId === trainingId
       ).definition;
+    },
+    showDetailModal(tagId){
+      this.showModal3 = true;
+      this.tagId = tagId;
     },
     closeModal(type) {
       if (type === 1) {
@@ -554,4 +574,19 @@ th {
 .css-w3-green:hover {
   background-color: #83bc5c;
 }
+
+.tag{
+  min-width:250px;
+  background-color: lightgreen;
+  padding-left: 5px;
+  padding-top: 5px; 
+  padding-bottom: 5px; 
+  padding-right: 5px;
+  border-radius: 5px;
+}
+
+.tag:hover{
+  background-color: rgb(109, 179, 109);
+}
+
 </style>

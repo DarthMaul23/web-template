@@ -111,7 +111,7 @@
 
 <script>
 import SearchDropdown from "@/components/MinorComponents/SearchDropdown.vue";
-import axios from "axios";
+import * as Api from "../API/api";
 
 export default {
   props: {
@@ -136,10 +136,9 @@ export default {
     };
   },
   methods: {
-    submitForm() {
+    async submitForm() {
       console.log(this.form);
-      axios.post(`https://localhost:7210/create-New-Activity?name=${this.form.name}&color=${this.form.color}&description=${this.form.description}`, this.form.selectedUsers)
-      // Handle form submission here
+      await Api.createActivity(this.form);
     },
     updateSelectedItems(newSelectedItems) {
       this.form.selectedUsers = newSelectedItems;

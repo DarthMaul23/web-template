@@ -110,7 +110,7 @@ export default {
     getListOfUsers(){
       axios
         .get(
-          `https://localhost:7210/get-Users-For-Trainer?trenerName=${localStorage.user}`
+          `https://treninkovy-denik-api.azurewebsites.net/get-Users-For-Trainer?trenerName=${localStorage.user}`
         )
         .then((response) => {
           response.data.forEach(item => {

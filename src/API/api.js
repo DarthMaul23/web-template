@@ -52,3 +52,9 @@ Retrieves the details of an activity with the given ID.
 export const getActivityDetail = async (id) => {
     return await axios.get(`${API_BASE_URL}/get-Activity-Detail?tagId=${id}`);
 }
+
+export const LoginUser = async (name, password) => {
+    return axios.post(`${API_BASE_URL}/user-Login`, {
+        userName: name,
+        userPassword: password});
+}

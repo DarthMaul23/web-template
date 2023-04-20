@@ -155,15 +155,15 @@
             <td>{{ day.activity.indexOf(item)+1}}</td>
             <td><a class="tag" @click="showDetailModal(item.id)">{{ item.name }}</a></td>
           </tr>
-          <tr class="w3-blue">
+          <tr class="w3-blue" v-if="day.training.definition.length > 0 ">
             <td colspan="6"><b>Instrukce</b></td>
           </tr>
           <tr
-            v-for="item in day.definition"
+            v-for="item in day.training.definition"
             :key="item.id"
             :class="!getColor(item.id) ? 'even' : ''"
           >
-            <td>{{ day.definition.indexOf(item) + 1 }}</td>
+            <td>{{ day.training.definition.indexOf(item) + 1 }}</td>
             <td>{{ getTagOrText(item.col1) }}</td>
             <td>{{ getTagOrText(item.col2) }}</td>
             <td>{{ getTagOrText(item.col3) }}</td>
@@ -172,7 +172,7 @@
               <img
                 :src="
                   getResponseIcon(
-                    day.response?.at(day.definition.indexOf(item)).type
+                    day.training.response?.at(day.training.definition.indexOf(item)).type
                   )
                 "
                 :width="32"
@@ -220,9 +220,11 @@ export default {
   computed: {},
   mounted() {
     this.getListOfTrainingDays();
+    /*
     axios.get("/api/users").then((response) => {
       this.users = response.data;
     });
+    */
     const today = new Date();
     const monday = new Date(
       today.setDate(today.getDate() - today.getDay() + 1)
@@ -432,7 +434,7 @@ export default {
 }
 
 .TreninkDay {
-  min-width: 800px;
+  min-width: 450px;
   max-width: 900px;
   margin-top: 50px;
   table-layout: fixed;

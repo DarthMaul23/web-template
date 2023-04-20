@@ -18,7 +18,8 @@
         <button
           style="font-size: 23px; margin-top: 3px"
           class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey"
-          onclick="w3_open();"
+          @click="toggleSidebar"
+          :class="{ 'show': showSidebar }"
         >
           <i class="fa fa-bars"></i> Menu
         </button>
@@ -32,6 +33,7 @@
         class="w3-sidebar w3-collapse w3-white"
         style="z-index: 3; width: 300px"
         id="mySidebar"
+        :class="{ 'show': showSidebar }"
       >
         <br />
         <div class="w3-container w3-row">
@@ -85,7 +87,7 @@
       <!-- Overlay effect when opening sidebar on small screens -->
       <div
         class="w3-overlay w3-hide-large w3-animate-opacity"
-        onclick="w3_close()"
+        @click="closeSidebar()"
         style="cursor: pointer"
         title="close side menu"
         id="myOverlay"
@@ -111,6 +113,7 @@
   </div>
 </template>
 <script>
+
 // @ is an alias to /src
 import TreninkyTydenComponent from "@/components/TreninkyTydenComponent.vue";
 
@@ -118,6 +121,11 @@ export default {
   name: "TreninkView",
   components: {
     TreninkyTydenComponent,
+  },
+  data() {
+    return {
+      showSidebar: false,
+    };
   },
   mounted() {
     if (localStorage.getItem("user") == null) {
@@ -131,6 +139,13 @@ export default {
     },
     getUserName(){
       return localStorage.getItem("user");
+    },
+    toggleSidebar() {
+      console.log(this.showSidebar);
+      this.showSidebar = !this.showSidebar;
+    },
+    closeSidebar() {
+      this.showSidebar = false;
     }
   }
 };

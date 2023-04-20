@@ -3,50 +3,57 @@
     <h2 class="login-header">PŘIHLÁŠENÍ</h2>
     <form @submit.prevent="submitForm">
       <label>Username:</label>
-      <input type="text" placeholder="Uživatelské jméno" v-model="username" name="name" style="margin-top:10px;margin-bottom:10px;"/>
+      <input
+        type="text"
+        placeholder="Uživatelské jméno"
+        v-model="username"
+        name="name"
+        style="margin-top: 10px; margin-bottom: 10px"
+      />
       <label>Password:</label>
-      <input type="password" placeholder="Heslo" v-model="password" name="password" style="margin-top:10px;margin-bottom:10px;"/>
+      <input
+        type="password"
+        placeholder="Heslo"
+        v-model="password"
+        name="password"
+        style="margin-top: 10px; margin-bottom: 10px"
+      />
       <button type="submit">Login</button>
     </form>
   </div>
 </template>
 
 <script>
-	
-import axios from 'axios';
+import * as Api from "../API/api";
 export default {
   data() {
     return {
-      username: '',
-      password: '',
-      errorMessage: ''
-    }
+      username: "",
+      password: "",
+      errorMessage: "",
+    };
   },
   methods: {
     async submitForm() {
       try {
-        await axios.post('https://treninkovy-denik-api.azurewebsites.net/user-Login', {
-          userName: this.username,
-          userPassword: this.password
-        }).then((response) => {
-          console.log(response);
-          console.log(response.data.loggedin);
+        let response = await Api.LoginUser(this.username, this.password);
+        let data = response.data;
+        console.log(data);
         // Redirect to main page if login is successful
-        if (response.data.loggedin === true) {
-          localStorage.setItem('user', response.data.userName);
-          localStorage.setItem('token', response.data.token);
-          localStorage.setItem('admin', response.data.admin);
-          this.$router.push('/main');
+        if (data.loggedin === true) {
+          localStorage.setItem("user", data.userName);
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("admin", data.admin);
+          this.$router.push("/main");
         } else {
-          this.errorMessage = 'Invalid credentials';
+          this.errorMessage = "Invalid credentials";
         }
-      })
       } catch (error) {
-        this.errorMessage = 'An error occurred';
+        this.errorMessage = "An error occurred";
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -68,7 +75,7 @@ a {
 
 body {
   background: lightgrey;
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
 }
 
 .login {
@@ -144,5 +151,4 @@ body {
 .login input[type="submit"]:focus {
   border-color: #05a;
 }
-
 </style>

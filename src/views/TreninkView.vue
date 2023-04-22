@@ -30,7 +30,7 @@
 
       <!-- Sidebar/menu -->
       <nav
-        class="w3-sidebar w3-collapse w3-white"
+        class="w3-sidebar w3-collapse"
         style="z-index: 3; width: 300px"
         id="mySidebar"
         :class="{ 'show': showSidebar }"
@@ -53,10 +53,10 @@
           </div>
         </div>
         <hr />
-        <div class="w3-container">
+        <div class="w3-container w3-container">
           <h5>NABÍDKA</h5>
         </div>
-        <div class="w3-bar-block">
+        <div class="w3-bar-block w3-container">
           <router-link :to="{ name: 'main' }">
             <a class="w3-bar-item w3-button">SEZNAM ATLETŮ</a>
           </router-link>
@@ -150,3 +150,7 @@ export default {
   }
 };
 </script>
+<style>
+@import url('../assets/styles.css');
+/* other global styles */
+</style>

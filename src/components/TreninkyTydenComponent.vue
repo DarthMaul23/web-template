@@ -151,9 +151,14 @@
             </tr>
           </thead>
           <tr v-if="day.activity.length > 0 " class="w3-blue"><td colspan="6"><b>Aktivity</b></td></tr>
-          <tr v-for="item in day.activity" :key="item.id">
+          <!--
+            <tr v-for="item in day.activity" :key="item.id">
             <td>{{ day.activity.indexOf(item)+1}}</td>
             <td><a class="tag" @click="showDetailModal(item.id)">{{ item.name }}</a></td>
+          </tr>
+        -->
+        <tr>
+            <td v-for="item in day.activity" :key="item.id"><a class="tag" @click="showDetailModal(item.id)">{{ item.name }}</a></td>
           </tr>
           <tr class="w3-blue" v-if="day.training.definition.length > 0 ">
             <td colspan="6"><b>Instrukce</b></td>
@@ -172,7 +177,7 @@
               <img
                 :src="
                   getResponseIcon(
-                    day.training.response?.at(day.training.definition.indexOf(item)).type
+                    day.training.response?.at(day.training.definition.indexOf(item)).response
                   )
                 "
                 :width="32"
@@ -418,11 +423,11 @@ export default {
     },
     getResponseIcon(id) {
       if (id === 0) {
-        return require("@/assets/q.png");
+        return require("../assets/q.png");
       } else if (id === 1) {
-        return require("@/assets/ok.svg");
+        return require("../assets/ok.svg");
       } else if (id === 2) {
-        return require("@/assets/nok.svg");
+        return require("../assets/nok.svg");
       }
     },
   },

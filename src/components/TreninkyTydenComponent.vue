@@ -134,7 +134,8 @@
     >
     <tag-detail :id="tagId"/>
   </ModalComponent>
-    <tbody>
+  <div v-if="isLoading" class="loading"></div>
+    <tbody v-else>
       <div v-for="day in items" :key="day.date">
         <table class="TreninkDay">
           <thead>
@@ -157,8 +158,9 @@
             <td><a class="tag" @click="showDetailModal(item.id)">{{ item.name }}</a></td>
           </tr>
         -->
-        <tr>
-            <td v-for="item in day.activity" :key="item.id"><a class="tag" @click="showDetailModal(item.id)">{{ item.name }}</a></td>
+        <tr v-for="item in day.activity" :key="item.id">
+          <td>{{ (day.activity.indexOf(item) + 1) }}</td>
+            <td colspan="5"><a class="tag" :style="{ backgroundColor: item.color }" @click="showDetailModal(item.id)">{{ item.name }}</a></td>
           </tr>
           <tr class="w3-blue" v-if="day.training.definition.length > 0 ">
             <td colspan="6"><b>Instrukce</b></td>
@@ -168,7 +170,7 @@
             :key="item.id"
             :class="!getColor(item.id) ? 'even' : ''"
           >
-            <td>{{ day.training.definition.indexOf(item) + 1 }}</td>
+            <td style="width:30px;">{{ day.training.definition.indexOf(item) + 1 }}</td>
             <td>{{ getTagOrText(item.col1) }}</td>
             <td>{{ getTagOrText(item.col2) }}</td>
             <td>{{ getTagOrText(item.col3) }}</td>
@@ -203,6 +205,7 @@ export default {
   },
   data() {
     return {
+      isLoading: true,
       items: [],
       itemsEdit: [],
       users: [],
@@ -275,15 +278,18 @@ export default {
       );
     },
     onChangeDate() {
+      this.isLoading = true;
       this.getListOfTrainingDays();
     },
     decreaseDate() {
+      this.isLoading = true;
       const currentDate = new Date(this.selectedDate);
       const newDate = new Date(currentDate.setDate(currentDate.getDate() - 7));
       this.selectedDate = newDate.toISOString().substr(0, 10);
       this.getListOfTrainingDays();
     },
     increaseDate() {
+      this.isLoading = true;
       const currentDate = new Date(this.selectedDate);
       const newDate = new Date(currentDate.setDate(currentDate.getDate() + 7));
       this.selectedDate = newDate.toISOString().substr(0, 10);
@@ -291,6 +297,7 @@ export default {
     },
     async getListOfTrainingDays() {
         let data = await Api.getTrainingWeek(this.userId, this.selectedDate);
+        this.isLoading = false;
         this.items = data;
         this.itemsEdit = data;
     },
@@ -584,7 +591,6 @@ th {
 
 .tag{
   min-width:250px;
-  background-color: lightgreen;
   padding-left: 5px;
   padding-top: 5px; 
   padding-bottom: 5px; 
@@ -594,6 +600,24 @@ th {
 
 .tag:hover{
   background-color: rgb(109, 179, 109);
+}
+
+.loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid #3498db;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 </style>

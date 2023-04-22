@@ -1,25 +1,25 @@
 <template>
-  <div>
-    <h2>{{ tag.name }}</h2>
+  <div v-if="isLoading" class="loading"></div>
+  <div v-else>
     <ul>
-      <li v-for="item in tag.items" :key="item.id">
+      <li>
         <div class="item-header">
-          <h3>{{ item.name }}</h3>
+          <h3>{{ tag.name }}</h3>
           <div class="item-controls">
             <button>Edit</button>
             <button>Delete</button>
           </div>
         </div>
         <div class="item-details">
-          <p><strong>Description:</strong> {{ item.description }}</p>
           <p>
             <strong>Color:</strong>
-            <span :style="{ backgroundColor: item.color }"
+            <span :style="{ backgroundColor: tag.color }"
               >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span
             >
           </p>
-          <p><strong>Start Date:</strong> {{ item.start_date }}</p>
-          <p><strong>End Date:</strong> {{ item.end_date }}</p>
+          <p><strong>Description:</strong> {{ tag.description }}</p>
+          <p><strong>Start Date:</strong> {{ tag.start_date }}</p>
+          <p><strong>End Date:</strong> {{ tag.end_date }}</p>
         </div>
       </li>
     </ul>
@@ -42,6 +42,7 @@ export default {
         name: "",
         items: [],
       },
+      isLoading: true,
     };
   },
   created() {
@@ -51,6 +52,7 @@ export default {
     async fetchTag() {
       try {
         var response = await Api.getActivityDetail(this.id);
+        this.isLoading = false;
         this.tag = response.data;
       } catch (error) {
         console.error(error);
@@ -82,6 +84,13 @@ li {
   margin-bottom: 10px;
 }
 
+.item-header h3{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
 .item-controls button {
   background-color: transparent;
   border: none;
@@ -106,5 +115,23 @@ li {
   height: 20px;
   border-radius: 50%;
   margin-right: 5px;
+}
+
+.loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid #3498db;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 </style>

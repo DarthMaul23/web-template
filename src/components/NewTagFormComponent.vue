@@ -21,7 +21,6 @@
       </table>
       <div style="width:100%; align-content: center; margin-top: 15px; margin-bottom: 5px;">
           <SearchDropdown
-            :label="test"
             :items="users"
             :selectedItems="form.selectedUsers"
             @update:selectedItems="updateSelectedItems"
@@ -137,7 +136,6 @@ export default {
   },
   methods: {
     async submitForm() {
-      console.log(this.form);
       await Api.createActivity(this.form);
     },
     updateSelectedItems(newSelectedItems) {

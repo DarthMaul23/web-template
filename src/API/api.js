@@ -45,9 +45,18 @@ export const createActivity = async (form) => {
 }
 
 /**
-Retrieves the details of an activity with the given ID.
-@param {string} id - The ID of the activity to retrieve details for.
-@returns {Promise} A promise that resolves with the activity details.
+Retrieves the description of an activity with the given ID.
+@param {string} id - The ID of the activity to retrieve description for.
+@returns {Promise} A promise that resolves with the activity description.
+*/
+export const getActivityDescription = async (id) => {
+    return await axios.get(`${API_BASE_URL}/get-Activity-Description?tagId=${id}`);
+}
+
+/**
+Retrieves the detail of an activity with the given ID.
+@param {string} id - The ID of the activity to retrieve detail for.
+@returns {Promise} A promise that resolves with the activity detail.
 */
 export const getActivityDetail = async (id) => {
     return await axios.get(`${API_BASE_URL}/get-Activity-Detail?tagId=${id}`);

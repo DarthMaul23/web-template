@@ -30,9 +30,12 @@
           </td>
           <td>{{ truncatedDescription(item.description) }}</td>
           <td>
-            <router-link :to="{ name: 'detail', params: { id: item.id } }">
-              <button class="button css-w3-orange">Details</button>
-            </router-link>
+            <button
+              @click="setShowModalEdit(item.id)"
+              class="button css-w3-orange"
+            >
+              Details
+            </button>
           </td>
         </tr>
       </tbody>
@@ -45,7 +48,7 @@
         class="pageNo"
       >
         {{ pageNumber }}
-    </a>
+      </a>
     </div>
     <ModalComponent
       :show-modal="showModal"
@@ -55,6 +58,15 @@
     >
       <NewTagFormComponent :list-of-users="listOfUsers" />
     </ModalComponent>
+    <ModalComponent
+      :show-modal="showModalEdit"
+      header-color="#3399ff"
+      title="Úprava aktivity"
+      @close="showModalEdit = false"
+    >
+      <EditTagFormComponent  :list-of-users="listOfUsers" 
+      :_tagId="tagId"/>
+    </ModalComponent>
   </div>
 </template>
 
@@ -62,29 +74,32 @@
 import axios from "axios";
 import ModalComponent from "@/components/ModalComponent.vue";
 import NewTagFormComponent from "@/components/NewTagFormComponent.vue";
+import EditTagFormComponent from './EditTagFormComponent.vue';
 
 export default {
   components: {
     ModalComponent,
     NewTagFormComponent,
+    EditTagFormComponent,
   },
   data() {
     return {
       showModal: false,
+      showModalEdit: false,
+      tagId: "",
       search: "",
       data: {},
       numberOfPages: 0,
       currentPage: 1,
       itemsPerPage: 50,
       options: [25, 50, 75, 100],
-      listOfUsers:[],
+      listOfUsers: [],
     };
   },
   mounted() {
     if (localStorage.getItem("user") == null) {
       this.$router.push("/login");
     }
-    console.log(localStorage.user);
     this.getListOfUsers();
     this.getActivities();
     this.getNumberOfPages();
@@ -107,14 +122,14 @@ export default {
     },
   },
   methods: {
-    getListOfUsers(){
+    getListOfUsers() {
       axios
         .get(
           `https://treninkovy-denik-api.azurewebsites.net/get-Users-For-Trainer?trenerName=${localStorage.user}`
         )
         .then((response) => {
-          response.data.forEach(item => {
-            this.listOfUsers.push({id: item.id, name: item.userName});
+          response.data.forEach((item) => {
+            this.listOfUsers.push({ id: item.id, name: item.userName });
           });
         })
         .catch((error) => {
@@ -146,6 +161,10 @@ export default {
       } else {
         return description;
       }
+    },
+    setShowModalEdit(id) {
+      this.tagId = id;
+      this.showModalEdit = true;
     },
   },
 };

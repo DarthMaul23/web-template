@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div v-if="isLoading" class="loading"></div>
+  <div v-else>
     <form @submit.prevent="submitForm">
       <table>
         <tr>
@@ -19,22 +20,35 @@
           </td>
         </tr>
       </table>
-      <div style="width:100%; align-content: center; margin-top: 15px; margin-bottom: 5px;">
-          <SearchDropdown
-            :label="test"
-            :items="users"
-            :selectedItems="form.selectedUsers"
-            @update:selectedItems="updateSelectedItems"
-            >Přidat uživatele:</SearchDropdown>
+      <div
+        style="
+          width: 100%;
+          align-content: center;
+          margin-top: 15px;
+          margin-bottom: 5px;
+        "
+      >
+        <SearchDropdown
+          :items="users"
+          :selectedItems="form.selectedUsers"
+          @update:selectedItems="updateSelectedItems"
+          >Přidat uživatele:</SearchDropdown
+        >
       </div>
-      <div style="margin-top: 15px;">
-        <b style="left:0;">Uživatele v aktivitě:</b>
+      <div style="margin-top: 15px">
+        <b style="left: 0">Uživatele v aktivitě:</b>
         <table>
           <tr>
             <th>Id</th>
             <th>Uživatel</th>
             <th>Opakování</th>
-            <th v-if="form.selectedUsers.some(item => item.repetition!==undefined || '' || 'daily')">
+            <th
+              v-if="
+                form.selectedUsers.some(
+                  (item) => item.repetition !== undefined || '' || 'daily'
+                )
+              "
+            >
               Parametr
             </th>
             <th>Od:</th>
@@ -44,7 +58,7 @@
           </tr>
           <tr v-for="(item, index) in form.selectedUsers" :key="item.id">
             <td>{{ index + 1 }}</td>
-            <td>{{ item.name }}</td>
+            <td>{{ item.name ? item.name : users[item.id].name }}</td>
             <td>
               <select id="repetition" v-model="item.repetition">
                 <option value="daily">Denní</option>
@@ -54,7 +68,11 @@
               </select>
             </td>
             <td>
-              <select v-if="item.repetition === 'weekly'" id="weekDay" v-model="item.weekDay">
+              <select
+                v-if="item.repetition === 'weekly'"
+                id="weekDay"
+                v-model="item.weekDay"
+              >
                 <option value="1">Pondělí</option>
                 <option value="2">Úterý</option>
                 <option value="3">Středa</option>
@@ -63,7 +81,11 @@
                 <option value="6">Sobota</option>
                 <option value="7">Neděle</option>
               </select>
-              <select v-if="item.repetition === 'biweekly'" id="weekDay" v-model="item.byWeekly">
+              <select
+                v-if="item.repetition === 'biweekly'"
+                id="weekDay"
+                v-model="item.byWeekly"
+              >
                 <option value="1">Pondělí</option>
                 <option value="2">Úterý</option>
                 <option value="3">Středa</option>
@@ -72,7 +94,11 @@
                 <option value="6">Sobota</option>
                 <option value="7">Neděle</option>
               </select>
-              <select v-if="item.repetition === 'monthly'" id="dayOfMonth" v-model="item.monthly">
+              <select
+                v-if="item.repetition === 'monthly'"
+                id="dayOfMonth"
+                v-model="item.monthly"
+              >
                 <option v-for="i in 31" :key="i" :value="i">{{ i }}</option>
               </select>
             </td>
@@ -115,16 +141,21 @@ import * as Api from "../API/api";
 
 export default {
   props: {
-      listOfUsers: {
-        type: [],
-        required: true,
-      },
+    _tagId:{
+      type: String,
+      required: true,
+    },
+    listOfUsers: {
+      type: [],
+      required: true,
+    },
   },
   components: {
     SearchDropdown,
   },
   data() {
     return {
+      tagId: this._tagId,
       form: {
         name: "",
         color: "#ffffff",
@@ -133,12 +164,22 @@ export default {
       },
       users: this.listOfUsers,
       search: "",
+      isLoading: true,
     };
+  },
+  async mounted(){
+    let response = await Api.getActivityDetail(this.tagId);
+    let data = response.data;
+    this.isLoading = false;
+    this.form.name = data.name;
+    this.form.color = data.color;
+    this.form.description = data.description;
+    this.form.selectedUsers = data.settings;
+
   },
   methods: {
     async submitForm() {
-      console.log(this.form);
-      await Api.createActivity(this.form);
+      //await Api.createActivity(this.form);
     },
     updateSelectedItems(newSelectedItems) {
       this.form.selectedUsers = newSelectedItems;
@@ -226,5 +267,22 @@ button {
 
 .css-w3-orange:hover {
   background-color: #d4b243;
+}
+.loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid #3498db;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 </style>

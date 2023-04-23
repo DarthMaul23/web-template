@@ -51,7 +51,7 @@ export default {
   methods: {
     async fetchTag() {
       try {
-        var response = await Api.getActivityDetail(this.id);
+        var response = await Api.getActivityDescription(this.id);
         this.isLoading = false;
         this.tag = response.data;
       } catch (error) {

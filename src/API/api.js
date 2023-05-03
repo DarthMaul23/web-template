@@ -62,6 +62,12 @@ export const getActivityDetail = async (id) => {
     return await axios.get(`${API_BASE_URL}/get-Activity-Detail?tagId=${id}`);
 }
 
+/**
+ * Logs in a user by sending a POST request to the specified API endpoint with the provided credentials.
+ * @param {string} name - The username of the user to log in.
+ * @param {string} password - The password of the user to log in.
+ * @returns {Promise} A promise that resolves to the response data of the login request.
+ */
 export const LoginUser = async (name, password) => {
     return axios.post(`${API_BASE_URL}/user-Login`, {
         userName: name,

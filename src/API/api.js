@@ -41,7 +41,7 @@ Creates a new activity with the given form data.
 @param {Array} form.selectedUsers - The list of users selected for the activity.
 */
 export const createActivity = async (form) => {
-    await axios.post(`${API_BASE_URL}/create-New-Activity?name=${form.name}&color=${form.color}&description=${form.description}`, form.selectedUsers);
+    await axios.post(`${API_BASE_URL}/create-New-Activity`, form);
 }
 
 /**
@@ -50,7 +50,7 @@ Retrieves the description of an activity with the given ID.
 @returns {Promise} A promise that resolves with the activity description.
 */
 export const getActivityDescription = async (id) => {
-    return await axios.get(`${API_BASE_URL}/get-Activity-Description?tagId=${id}`);
+    return await axios.get(`${API_BASE_URL}/activities/${id}/description`);
 }
 
 /**
@@ -59,7 +59,17 @@ Retrieves the detail of an activity with the given ID.
 @returns {Promise} A promise that resolves with the activity detail.
 */
 export const getActivityDetail = async (id) => {
-    return await axios.get(`${API_BASE_URL}/get-Activity-Detail?tagId=${id}`);
+    return await axios.get(`${API_BASE_URL}/activities/${id}/detail`);
+}
+
+/**
+Retrieves a list of sub-activities associated with a given tag association ID and user ID.
+@param {string} tagAssociationId - The ID of the tag association.
+@param {number} userId - The ID of the user.
+@returns {Promise} A promise that resolves to the response data of the API request.
+*/
+export const getActivitySubActivities = async (tagAssociationId, userId) => {
+    return await axios.get(`${API_BASE_URL}/activities/definition/tagAsociaiton/${tagAssociationId}/user/${userId}`);
 }
 
 /**

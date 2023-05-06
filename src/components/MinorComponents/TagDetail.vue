@@ -3,12 +3,9 @@
   <div v-else>
     <ul>
       <li>
-        <div class="item-header">
-          <h3>{{ tag.name }}</h3>
-          <div class="item-controls">
-            <button>Edit</button>
-            <button>Delete</button>
-          </div>
+        <div class="header">
+          <h2 style="text-align: left; color: #3498db;">Name:</h2>
+          <h2>{{ tag.name }}</h2>
         </div>
         <div class="item-details">
           <p>
@@ -18,8 +15,37 @@
             >
           </p>
           <p><strong>Description:</strong> {{ tag.description }}</p>
-          <p><strong>Start Date:</strong> {{ tag.start_date }}</p>
-          <p><strong>End Date:</strong> {{ tag.end_date }}</p>
+        </div>
+        <div class="header" style="text-align: left; color: #3498db;">
+          <h2>Activities</h2>
+        </div>
+        <div class="body">
+          <ul>
+            <li v-for="activity in activities" :key="activity.id">
+              <h3>{{ activity.name }}</h3>
+              <div
+                style="background-color: #3498db; height: 5px; width: 100%"
+              ></div>
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                "
+              >
+                <p style="margin-top: 10px">{{ activity.definition }}</p>
+                <img
+                style="margin-left: 10px"
+                :src="
+                  getResponseIcon(activity.response.response-2
+                  )
+                "
+                :width="32"
+                :height="32"
+              />
+              </div>
+            </li>
+          </ul>
         </div>
       </li>
     </ul>
@@ -42,6 +68,7 @@ export default {
         name: "",
         items: [],
       },
+      activities: [],
       isLoading: true,
     };
   },
@@ -52,10 +79,22 @@ export default {
     async fetchTag() {
       try {
         var response = await Api.getActivityDescription(this.id);
+
+        var _activities = await Api.getActivitySubActivities(this.id, 1);
         this.isLoading = false;
         this.tag = response.data;
+        this.activities = _activities.data;
       } catch (error) {
         console.error(error);
+      }
+    },
+    getResponseIcon(id) {
+      if (id === 0) {
+        return require("../../assets/q.png");
+      } else if (id === 1) {
+        return require("../../assets/ok.svg");
+      } else if (id === 2) {
+        return require("../../assets/nok.svg");
       }
     },
   },
@@ -70,11 +109,9 @@ ul {
 }
 
 li {
-  background-color: #f2f2f2;
+  background-color: #ffffff;
   margin-bottom: 20px;
   padding: 20px;
-  border-radius: 4px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .item-header {
@@ -84,7 +121,7 @@ li {
   margin-bottom: 10px;
 }
 
-.item-header h3{
+.item-header h3 {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -131,7 +168,11 @@ li {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>

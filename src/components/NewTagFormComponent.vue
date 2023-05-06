@@ -136,7 +136,26 @@ export default {
   },
   methods: {
     async submitForm() {
-      await Api.createActivity(this.form);
+
+      console.log(this.form);
+      const transformedObject = {
+            tag: {
+              name: this.form.name,
+              color: this.form.color,
+              description: this.form.description,
+            },
+            details: this.form.selectedUsers.map((user) => ({
+              id: user.id,
+              repetition: user.repetition,
+              weekDay: user.weekDay ? Number(user.weekDay) : 0,
+              column: user.column,
+              dateFrom: user.dateFrom,
+              dateTo: user.dateTo,
+            })),
+          };
+
+      console.log(transformedObject);
+      await Api.createActivity(transformedObject);
     },
     updateSelectedItems(newSelectedItems) {
       this.form.selectedUsers = newSelectedItems;

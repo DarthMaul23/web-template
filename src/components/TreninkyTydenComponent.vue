@@ -132,9 +132,9 @@
       title="Detail Aktivity"
       @close="showModal3 = false"
     >
-    <tag-detail :id="tagId"/>
-  </ModalComponent>
-  <div v-if="isLoading" class="loading"></div>
+      <tag-detail :id="tagId" />
+    </ModalComponent>
+    <div v-if="isLoading" class="loading"></div>
     <tbody v-else>
       <div v-for="day in items" :key="day.date">
         <table class="TreninkDay">
@@ -151,18 +151,27 @@
               </th>
             </tr>
           </thead>
-          <tr v-if="day.activity.length > 0 " class="w3-blue"><td colspan="6"><b>Aktivity</b></td></tr>
+          <tr v-if="day.activity.length > 0" class="w3-blue">
+            <td colspan="6"><b>Aktivity</b></td>
+          </tr>
           <!--
             <tr v-for="item in day.activity" :key="item.id">
             <td>{{ day.activity.indexOf(item)+1}}</td>
             <td><a class="tag" @click="showDetailModal(item.id)">{{ item.name }}</a></td>
           </tr>
         -->
-        <tr v-for="item in day.activity" :key="item.id">
-          <td>{{ (day.activity.indexOf(item) + 1) }}</td>
-            <td colspan="5"><a class="tag" :style="{ backgroundColor: item.color }" @click="showDetailModal(item.id)">{{ item.name }}</a></td>
+          <tr v-for="item in day.activity" :key="item.id">
+            <td>{{ day.activity.indexOf(item) + 1 }}</td>
+            <td colspan="5">
+              <a
+                class="tag"
+                :style="{ backgroundColor: item.color }"
+                @click="showDetailModal(item.tagAsociationId)"
+                >{{ item.name }}</a
+              >
+            </td>
           </tr>
-          <tr class="w3-blue" v-if="day.training.definition.length > 0 ">
+          <tr class="w3-blue" v-if="day.training.definition.length > 0">
             <td colspan="6"><b>Instrukce</b></td>
           </tr>
           <tr
@@ -170,7 +179,9 @@
             :key="item.id"
             :class="!getColor(item.id) ? 'even' : ''"
           >
-            <td style="width:30px;">{{ day.training.definition.indexOf(item) + 1 }}</td>
+            <td style="width: 30px">
+              {{ day.training.definition.indexOf(item) + 1 }}
+            </td>
             <td>{{ getTagOrText(item.col1) }}</td>
             <td>{{ getTagOrText(item.col2) }}</td>
             <td>{{ getTagOrText(item.col3) }}</td>
@@ -179,7 +190,9 @@
               <img
                 :src="
                   getResponseIcon(
-                    day.training.response?.at(day.training.definition.indexOf(item)).response
+                    day.training.response?.at(
+                      day.training.definition.indexOf(item)
+                    ).response
                   )
                 "
                 :width="32"
@@ -195,7 +208,7 @@
 <script>
 import axios from "axios";
 import ModalComponent from "@/components/ModalComponent.vue";
-import TagDetail from './MinorComponents/TagDetail.vue';
+import TagDetail from "./MinorComponents/TagDetail.vue";
 import * as Api from "../API/api";
 
 export default {
@@ -296,10 +309,10 @@ export default {
       this.getListOfTrainingDays();
     },
     async getListOfTrainingDays() {
-        let data = await Api.getTrainingWeek(this.userId, this.selectedDate);
-        this.isLoading = false;
-        this.items = data;
-        this.itemsEdit = data;
+      let data = await Api.getTrainingWeek(this.userId, this.selectedDate);
+      this.isLoading = false;
+      this.items = data;
+      this.itemsEdit = data;
     },
     async getTrainingPlanPDF() {
       await axios
@@ -375,7 +388,6 @@ export default {
         this.tableData = [{ id: 0, col1: "", col2: "", col3: "", col4: "" }];
 
         await Api.createNewTraining(this.userId, this.newDate, data);
-
       } else if (type === 2) {
         await this.updateTraining();
       }
@@ -415,7 +427,7 @@ export default {
         (x) => x.trainingId === trainingId
       ).definition;
     },
-    showDetailModal(tagId){
+    showDetailModal(tagId) {
       this.showModal3 = true;
       this.tagId = tagId;
     },
@@ -589,16 +601,16 @@ th {
   background-color: #83bc5c;
 }
 
-.tag{
-  min-width:250px;
+.tag {
+  min-width: 250px;
   padding-left: 5px;
-  padding-top: 5px; 
-  padding-bottom: 5px; 
+  padding-top: 5px;
+  padding-bottom: 5px;
   padding-right: 5px;
   border-radius: 5px;
 }
 
-.tag:hover{
+.tag:hover {
   background-color: rgb(109, 179, 109);
 }
 
@@ -616,8 +628,11 @@ th {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
-
 </style>

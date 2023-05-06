@@ -97,6 +97,7 @@
           </tr>
         </table>
       </div>
+      <activity-form :activities-list="form.activities" @activity-added="addActivity" @activity-removed="removeActivity" ></activity-form>
       <button id="save_button" type="submit" class="button css-w3-orange">
         Save
       </button>
@@ -110,6 +111,7 @@
 
 <script>
 import SearchDropdown from "@/components/MinorComponents/SearchDropdown.vue";
+import ActivityForm from "@/components/MinorComponents/ActivityForm.vue";
 import * as Api from "../API/api";
 
 export default {
@@ -121,6 +123,7 @@ export default {
   },
   components: {
     SearchDropdown,
+    ActivityForm
   },
   data() {
     return {
@@ -129,6 +132,7 @@ export default {
         color: "#ffffff",
         description: "",
         selectedUsers: [],
+        activities: []
       },
       users: this.listOfUsers,
       search: "",
@@ -165,6 +169,14 @@ export default {
       if (index !== -1) {
         this.form.selectedUsers.splice(index, 1);
       }
+    },
+    addActivity(activity) {
+      console.log(activity);
+      this.form.activities.push(activity);
+    },
+    removeActivity(activity) {
+      console.log(activity);
+      //this.form.activities.push(activity);
     },
   },
 };
@@ -243,5 +255,10 @@ button {
 
 .css-w3-orange:hover {
   background-color: #d4b243;
+}
+
+b{
+  text-align: left;
+  align-self: left;
 }
 </style>

@@ -2,7 +2,7 @@
   <div v-if="showModal" class="modalBg">
     <div class="modalWindow">
       <div :style="{ backgroundColor: headerColor }" class="modal-header">
-        <h2 class="modal-title">{{ title }}</h2>
+        <h1 class="modal-title">{{ title }}</h1>
         <button @click="closeModal" class="modal-close">&times;</button>
       </div>
       <div class="modal-content">

@@ -67,6 +67,7 @@ export const getActivityDetail = async (id) => {
 Retrieves a list of sub-activities associated with a given tag association ID and user ID.
 @param {string} tagAssociationId - The ID of the tag association.
 @param {number} userId - The ID of the user.
+@param {date} date - The date of the activity.
 @returns {Promise} A promise that resolves to the response data of the API request.
 */
 export const getActivitySubActivities = async (tagAssociationId, userId, date) => {
@@ -74,10 +75,22 @@ export const getActivitySubActivities = async (tagAssociationId, userId, date) =
     return await axios.get(`${API_BASE_URL}/activities/definition/tagAsociaiton/${tagAssociationId}/user/${userId}/date/${date}`);
 }
 
+/**
+Fetches a list of users assigned to a trainer from the API server.
+@param {string} trenerName - The name of the trainer whose assigned users are to be retrieved.
+@returns {Promise} - A promise that resolves to the response data.
+*/
 export const getUsersForTrainer = async (trenerName) => {
     return await axios.get(`${API_BASE_URL}/get-Users-For-Trainer?trenerName=${trenerName}` );
 }
-  
+
+/**
+Fetches a list of activities from the API server.
+@param {number} currentPage - The current page number.
+@param {number} itemsPerPage - The number of items to be displayed per page.
+@param {string} searchTerm - The search term to filter the activities.
+@returns {Promise} - A promise that resolves to the response data.
+*/
 export const getListOfActivities = async (currentPage, itemsPerPage, searchTerm) => {
     return await axios.get(`${API_BASE_URL}/activities?userId=0&pageNo=${currentPage}&itemsPerPage=${itemsPerPage}&search=${searchTerm}`);
 }

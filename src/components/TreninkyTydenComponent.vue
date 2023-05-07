@@ -132,7 +132,7 @@
       title="Detail Aktivity"
       @close="showModal3 = false"
     >
-      <tag-detail :id="tagId" />
+      <tag-detail :id="tagId" :date="tagDate"/>
     </ModalComponent>
     <div v-if="isLoading" class="loading"></div>
     <tbody v-else>
@@ -166,7 +166,7 @@
               <a
                 class="tag"
                 :style="{ backgroundColor: item.color }"
-                @click="showDetailModal(item.tagAsociationId)"
+                @click="showDetailModal(item.tagAsociationId, day.date)"
                 >{{ item.name }}</a
               >
             </td>
@@ -224,6 +224,7 @@ export default {
       users: [],
       userId: 1,
       tagId: "",
+      tagDate: "",
       editTreninkId: 0,
       editTreninkDate: "",
       selectedDate: new Date().toISOString().substr(0, 10),
@@ -427,9 +428,10 @@ export default {
         (x) => x.trainingId === trainingId
       ).definition;
     },
-    showDetailModal(tagId) {
+    showDetailModal(tagId,date) {
       this.showModal3 = true;
       this.tagId = tagId;
+      this.tagDate = date;
     },
     closeModal(type) {
       if (type === 1) {

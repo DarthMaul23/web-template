@@ -61,6 +61,10 @@ export default {
       type: String,
       required: true,
     },
+    date: {
+      type: String,
+      required: true,
+    },
   },
   data() {
     return {
@@ -80,7 +84,7 @@ export default {
       try {
         var response = await Api.getActivityDescription(this.id);
 
-        var _activities = await Api.getActivitySubActivities(this.id, 1);
+        var _activities = await Api.getActivitySubActivities(this.id, 1, this.date);
         this.isLoading = false;
         this.tag = response.data;
         this.activities = _activities.data;

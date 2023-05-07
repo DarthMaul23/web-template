@@ -64,17 +64,16 @@
       title="Úprava aktivity"
       @close="showModalEdit = false"
     >
-      <EditTagFormComponent  :list-of-users="listOfUsers" 
-      :_tagId="tagId"/>
+      <EditTagFormComponent :list-of-users="listOfUsers" :_tagId="tagId" />
     </ModalComponent>
   </div>
 </template>
 
 <script>
-import axios from "axios";
+import * as Api from "../API/api";
 import ModalComponent from "@/components/ModalComponent.vue";
 import NewTagFormComponent from "@/components/NewTagFormComponent.vue";
-import EditTagFormComponent from './EditTagFormComponent.vue';
+import EditTagFormComponent from "./EditTagFormComponent.vue";
 
 export default {
   components: {
@@ -122,31 +121,20 @@ export default {
     },
   },
   methods: {
-    getListOfUsers() {
-      axios
-        .get(
-          `https://treninkovy-denik-api.azurewebsites.net/get-Users-For-Trainer?trenerName=${localStorage.user}`
-        )
-        .then((response) => {
-          response.data.forEach((item) => {
-            this.listOfUsers.push({ id: item.id, name: item.userName });
-          });
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+    async getListOfUsers() {
+      var response = await Api.getUsersForTrainer(localStorage.user);
+      response.data.forEach((item) => {
+        this.listOfUsers.push({ id: item.id, name: item.userName });
+      });
     },
-    getActivities() {
-      axios
-        .get(
-          `https://treninkovy-denik-api.azurewebsites.net/get-Activity-List?userId=0&pageNo=${this.currentPage}&itemsPerPage=${this.itemsPerPage}&search=${this.search}`
-        )
-        .then((response) => {
-          this.data = response.data;
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+    async getActivities() {
+      var response = await Api.getListOfActivities(
+        this.currentPage,
+        this.itemsPerPage,
+        this.search
+      );
+
+      this.data = response.data;
     },
     getNumberOfPages() {
       if (this.data.noRecords !== undefined) {

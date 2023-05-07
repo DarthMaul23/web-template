@@ -41,6 +41,7 @@ Creates a new activity with the given form data.
 @param {Array} form.selectedUsers - The list of users selected for the activity.
 */
 export const createActivity = async (form) => {
+    //console.log(form);
     await axios.post(`${API_BASE_URL}/create-New-Activity`, form);
 }
 
@@ -70,6 +71,14 @@ Retrieves a list of sub-activities associated with a given tag association ID an
 */
 export const getActivitySubActivities = async (tagAssociationId, userId) => {
     return await axios.get(`${API_BASE_URL}/activities/definition/tagAsociaiton/${tagAssociationId}/user/${userId}`);
+}
+
+export const getUsersForTrainer = async (trenerName) => {
+    return await axios.get(`${API_BASE_URL}/get-Users-For-Trainer?trenerName=${trenerName}` );
+}
+  
+export const getListOfActivities = async (currentPage, itemsPerPage, searchTerm) => {
+    return await axios.get(`${API_BASE_URL}/activities?userId=0&pageNo=${currentPage}&itemsPerPage=${itemsPerPage}&search=${searchTerm}`);
 }
 
 /**

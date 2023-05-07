@@ -156,6 +156,7 @@ export default {
               dateFrom: user.dateFrom,
               dateTo: user.dateTo,
             })),
+            activities: this.form.activities
           };
 
       console.log(transformedObject);

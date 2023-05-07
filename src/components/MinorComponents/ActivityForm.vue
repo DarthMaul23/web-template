@@ -67,7 +67,7 @@ export default {
       if (this.name.trim() !== "") {
         this.warningMessage = "";
         const newActivity = {
-          id: Date.now(),
+          id: "",
           name: this.name,
           definition: this.definition,
           response: { id: "", response: 0 },
@@ -76,7 +76,7 @@ export default {
         this.name = "";
         this.definition = "";
       }else{
-        this.warningMessage = "Please enter a name for the activity.";
+        this.warningMessage = "Zadejte název aktivity";
       }
     },
     removeActivity(activity) {

@@ -37,7 +37,7 @@
                 <img
                 style="margin-left: 10px"
                 :src="
-                  getResponseIcon(activity.response.response-2
+                  getResponseIcon(activity.response.response
                   )
                 "
                 :width="32"

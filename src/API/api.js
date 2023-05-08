@@ -71,7 +71,6 @@ Retrieves a list of sub-activities associated with a given tag association ID an
 @returns {Promise} A promise that resolves to the response data of the API request.
 */
 export const getActivitySubActivities = async (tagAssociationId, userId, date) => {
-    console.log(date);
     return await axios.get(`${API_BASE_URL}/activities/definition/tagAsociaiton/${tagAssociationId}/user/${userId}/date/${date}`);
 }
 
@@ -102,7 +101,5 @@ export const getListOfActivities = async (currentPage, itemsPerPage, searchTerm)
  * @returns {Promise} A promise that resolves to the response data of the login request.
  */
 export const LoginUser = async (name, password) => {
-    return axios.post(`${API_BASE_URL}/user-Login`, {
-        userName: name,
-        userPassword: password});
+    return axios.post(`${API_BASE_URL}/user-Login`, { userName: name, userPassword: password });
 }

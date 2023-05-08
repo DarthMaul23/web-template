@@ -93,11 +93,11 @@ export default {
       }
     },
     getResponseIcon(id) {
-      if (id === 0) {
+      if (id === 1) {
         return require("../../assets/q.png");
-      } else if (id === 1) {
-        return require("../../assets/ok.svg");
       } else if (id === 2) {
+        return require("../../assets/ok.svg");
+      } else if (id === 3) {
         return require("../../assets/nok.svg");
       }
     },

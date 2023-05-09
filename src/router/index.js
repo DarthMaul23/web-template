@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import TreninkView from '../views/TreninkView.vue'
+import TreninkUserView from '../views/TreninkUserView.vue'
 import LoginView from '../views/LoginView.vue'
 import DetailView from '../views/DetailView.vue'
 import NewUserView from '../views/NewUserView.vue'
@@ -32,6 +33,11 @@ const routes = [
     path: '/trainingWeek/:id',
     name: 'trainingWeek',
     component: TreninkView
+  },
+  {
+    path: '/trainingUserWeek/:id',
+    name: 'trainingUserWeek',
+    component: TreninkUserView
   },
   {
     path: '/newUser',

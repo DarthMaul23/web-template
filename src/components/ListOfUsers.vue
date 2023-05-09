@@ -45,7 +45,7 @@ export default {
   },
   mounted() {
     axios
-      .get('https://treninkovy-denik-api.azurewebsites.net/get-User-List?trenerId=0')
+      .get('https://localhost:7210/get-User-List?trenerId=0')
       .then(response => {
         this.items = response.data;
       })

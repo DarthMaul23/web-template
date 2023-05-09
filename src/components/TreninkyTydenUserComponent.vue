@@ -132,7 +132,7 @@
       title="Detail Aktivity"
       @close="showModal3 = false"
     >
-      <tag-detail :id="tagId" :date="tagDate" :user="Boolean(false)"/>
+      <tag-detail :id="tagId" :date="tagDate" :user="Boolean(true)"/>
     </ModalComponent>
     <div v-if="isLoading" class="loading"></div>
     <tbody v-else>

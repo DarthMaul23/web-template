@@ -94,6 +94,10 @@ export const getListOfActivities = async (currentPage, itemsPerPage, searchTerm)
     return await axios.get(`${API_BASE_URL}/activities?userId=0&pageNo=${currentPage}&itemsPerPage=${itemsPerPage}&search=${searchTerm}`);
 }
 
+export const setActivityResponse = async (responseId, responseValue) => {
+    return await axios.post(`${API_BASE_URL}/activities/setResponse/responseId/${responseId}/responseValue/${responseValue}`);
+}
+
 /**
  * Logs in a user by sending a POST request to the specified API endpoint with the provided credentials.
  * @param {string} name - The username of the user to log in.

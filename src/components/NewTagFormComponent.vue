@@ -172,7 +172,7 @@ export default {
       }
     },
     addActivity(activity) {
-      console.log(activity);
+      activity.Order = this.form.activities.length;
       this.form.activities.push(activity);
     },
     removeActivity(activity) {

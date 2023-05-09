@@ -4,7 +4,7 @@
     <ul>
       <li>
         <div class="header">
-          <h2 style="text-align: left; color: #3498db;">Name:</h2>
+          <h2 style="text-align: left; color: #3498db">Name:</h2>
           <h2>{{ tag.name }}</h2>
         </div>
         <div class="item-details">
@@ -16,13 +16,13 @@
           </p>
           <p><strong>Description:</strong> {{ tag.description }}</p>
         </div>
-        <div class="header" style="text-align: left; color: #3498db;">
+        <div class="header" style="text-align: left; color: #3498db">
           <h2>Activities</h2>
         </div>
         <div class="body">
           <ul>
             <li v-for="activity in activities" :key="activity.id">
-              <h3>{{ activity.name }}</h3>
+              <h3>{{ activity.name }} -#- {{ activity.response.id }}</h3>
               <div
                 style="background-color: #3498db; height: 5px; width: 100%"
               ></div>
@@ -34,15 +34,53 @@
                 "
               >
                 <p style="margin-top: 10px">{{ activity.definition }}</p>
+                <div v-if="user">
                 <img
-                style="margin-left: 10px"
-                :src="
-                  getResponseIcon(activity.response.response
-                  )
-                "
-                :width="32"
-                :height="32"
-              />
+                  style="margin-left: 10px"
+                  :src="getResponseIcon(activity.response.response)"
+                  :width="32"
+                  :height="32"
+                />
+                </div>
+                <div v-else>
+                  <table>
+                    <tr>
+                      <td>
+                        <img
+                          style="margin-left: 10px"
+                          :src="getResponseIcon(1)"
+                          :width="32"
+                          :height="32"
+                        />
+                      </td>
+                      <td>
+                        <input type="radio" value="1" @click="handleResponseClick(activity.response.id, 1)"/>
+                      </td>
+                      <td>
+                        <img
+                          style="margin-left: 10px"
+                          :src="getResponseIcon(2)"
+                          :width="32"
+                          :height="32"
+                        />
+                      </td>
+                      <td>
+                        <input type="radio" value="2" @click="handleResponseClick(activity.response.id, 2)"/>
+                      </td>
+                      <td>
+                        <img
+                          style="margin-left: 10px"
+                          :src="getResponseIcon(3)"
+                          :width="32"
+                          :height="32"
+                        />
+                      </td>
+                      <td>
+                        <input type="radio" value="3" @click="handleResponseClick(activity.response.id, 3)"/>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
               </div>
             </li>
           </ul>
@@ -65,6 +103,10 @@ export default {
       type: String,
       required: true,
     },
+    user: { 
+      type: Boolean,
+      required: false,
+    },
   },
   data() {
     return {
@@ -79,12 +121,21 @@ export default {
   created() {
     this.fetchTag();
   },
+  mounted:{
+    getStatus(){
+    console.log(this.user);
+    },
+  },
   methods: {
     async fetchTag() {
       try {
         var response = await Api.getActivityDescription(this.id);
 
-        var _activities = await Api.getActivitySubActivities(this.id, 1, this.date);
+        var _activities = await Api.getActivitySubActivities(
+          this.id,
+          1,
+          this.date
+        );
         this.isLoading = false;
         this.tag = response.data;
         this.activities = _activities.data;
@@ -101,6 +152,9 @@ export default {
         return require("../../assets/nok.svg");
       }
     },
+    handleResponseClick(responseId, responseValue) {
+      Api.setActivityResponse(responseId, responseValue);
+  },
   },
 };
 </script>

@@ -91,7 +91,7 @@ export default {
       this.$router.push('/login');
     }
     axios
-      .get('https://treninkovy-denik-api.azurewebsites.net/get-User-Info-By-Id?userId='+this.$route.params.id)
+      .get('https://localhost:7210/get-User-Info-By-Id?userId='+this.$route.params.id)
       .then(response => {
         this.info = response.data.info;
       })

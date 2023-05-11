@@ -34,13 +34,13 @@
                 "
               >
                 <p style="margin-top: 10px">{{ activity.definition }}</p>
-                <div v-if="user">
-                <img
-                  style="margin-left: 10px"
-                  :src="getResponseIcon(activity.response.response)"
-                  :width="32"
-                  :height="32"
-                />
+                <div v-if="isAdmin()">
+                  <img
+                    style="margin-left: 10px"
+                    :src="getResponseIcon(activity.response.response)"
+                    :width="32"
+                    :height="32"
+                  />
                 </div>
                 <div v-else>
                   <table>
@@ -54,7 +54,11 @@
                         />
                       </td>
                       <td>
-                        <input type="radio" value="1" @click="handleResponseClick(activity.response.id, 1)"/>
+                        <input
+                          type="radio"
+                          value="1"
+                          @click="handleResponseClick(activity.response.id, 1)"
+                        />
                       </td>
                       <td>
                         <img
@@ -65,7 +69,11 @@
                         />
                       </td>
                       <td>
-                        <input type="radio" value="2" @click="handleResponseClick(activity.response.id, 2)"/>
+                        <input
+                          type="radio"
+                          value="2"
+                          @click="handleResponseClick(activity.response.id, 2)"
+                        />
                       </td>
                       <td>
                         <img
@@ -76,7 +84,11 @@
                         />
                       </td>
                       <td>
-                        <input type="radio" value="3" @click="handleResponseClick(activity.response.id, 3)"/>
+                        <input
+                          type="radio"
+                          value="3"
+                          @click="handleResponseClick(activity.response.id, 3)"
+                        />
                       </td>
                     </tr>
                   </table>
@@ -103,9 +115,9 @@ export default {
       type: String,
       required: true,
     },
-    user: { 
+    user: {
       type: Boolean,
-      required: false,
+      required: true,
     },
   },
   data() {
@@ -121,16 +133,12 @@ export default {
   created() {
     this.fetchTag();
   },
-  mounted:{
-    getStatus(){
-    console.log(this.user);
-    },
+  mounted() {
   },
   methods: {
     async fetchTag() {
       try {
         var response = await Api.getActivityDescription(this.id);
-
         var _activities = await Api.getActivitySubActivities(
           this.id,
           1,
@@ -154,7 +162,14 @@ export default {
     },
     handleResponseClick(responseId, responseValue) {
       Api.setActivityResponse(responseId, responseValue);
-  },
+    },
+    isAdmin() {
+      if (localStorage.getItem("admin") == "true") {
+        return true;
+      } else {
+        return false;
+      }
+    },
   },
 };
 </script>

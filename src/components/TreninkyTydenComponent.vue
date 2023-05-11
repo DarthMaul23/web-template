@@ -132,7 +132,7 @@
       title="Detail Aktivity"
       @close="showModal3 = false"
     >
-      <tag-detail :id="tagId" :date="tagDate" :user="Boolean(false)"/>
+      <tag-detail :id="tagId" :date="tagDate"/>
     </ModalComponent>
     <div v-if="isLoading" class="loading"></div>
     <tbody v-else>
@@ -187,7 +187,8 @@
             <td>{{ getTagOrText(item.col3) }}</td>
             <td>{{ getTagOrText(item.col4) }}</td>
             <td :width="40">
-              <img
+              <div v-if="isAdmin()">
+                <img
                 :src="
                   getResponseIcon(
                     day.training.response?.at(
@@ -198,6 +199,62 @@
                 :width="32"
                 :height="32"
               />
+              </div>
+              <div v-else>
+                  <table>
+                    <tr>
+                      <td>
+                        <img
+                          style="margin-left: 10px"
+                          :src="getResponseIcon(0)"
+                          :width="32"
+                          :height="32"
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="radio"
+                          value="1"
+                          @click="handleResponseClick(activity.response.id, 0)"
+                        />
+                      </td>
+                      </tr>
+                      <tr>
+                      <td>
+                        <img
+                          style="margin-left: 10px"
+                          :src="getResponseIcon(1)"
+                          :width="32"
+                          :height="32"
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="radio"
+                          value="2"
+                          @click="handleResponseClick(activity.response.id, 1)"
+                        />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <img
+                          style="margin-left: 10px"
+                          :src="getResponseIcon(2)"
+                          :width="32"
+                          :height="32"
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="radio"
+                          value="3"
+                          @click="handleResponseClick(activity.response.id, 2)"
+                        />
+                      </td>
+                    </tr>
+                  </table>
+                </div>
             </td>
           </tr>
         </table>
@@ -449,6 +506,13 @@ export default {
         return require("../assets/ok.svg");
       } else if (id === 2) {
         return require("../assets/nok.svg");
+      }
+    },
+    isAdmin() {
+      if (localStorage.getItem("admin") == "true") {
+        return true;
+      } else {
+        return false;
       }
     },
   },

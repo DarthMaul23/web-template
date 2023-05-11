@@ -215,7 +215,9 @@
                         <input
                           type="radio"
                           value="1"
-                          @click="handleResponseClick(activity.response.id, 0)"
+                          :name="item.id"
+                          @click="handleResponseClick(item, 0)"
+                          v-model="item.response"
                         />
                       </td>
                       </tr>
@@ -232,7 +234,9 @@
                         <input
                           type="radio"
                           value="2"
-                          @click="handleResponseClick(activity.response.id, 1)"
+                          :name="item.id"
+                          @click="handleResponseClick(item, 1)"
+                          v-model="item.response"
                         />
                       </td>
                     </tr>
@@ -249,7 +253,9 @@
                         <input
                           type="radio"
                           value="3"
-                          @click="handleResponseClick(activity.response.id, 2)"
+                          :name="item.id"
+                          @click="handleResponseClick(item, 2)"
+                          v-model="item.response"
                         />
                       </td>
                     </tr>
@@ -465,7 +471,6 @@ export default {
     },
     getTagOrText(value) {
       if (this.isGuid(value)) {
-        // return "<p=>Testovací Tag</p>";
         let tag = `<button onclick="openModal('${value}')">Open Modal</button>`;
         return tag.outerHTML;
       }
@@ -515,6 +520,9 @@ export default {
         return false;
       }
     },
+    handleResponseClick(item, response){
+      Api.setTreninkResponse(item.id, response);
+    }
   },
 };
 </script>

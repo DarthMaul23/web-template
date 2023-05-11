@@ -98,6 +98,10 @@ export const setActivityResponse = async (responseId, responseValue) => {
     return await axios.post(`${API_BASE_URL}/activities/setResponse/responseId/${responseId}/responseValue/${responseValue}`);
 }
 
+export const setTreninkResponse = async (treninkResponseId, responseValue) => {
+    return await axios.put(`${API_BASE_URL}/update-Training-Response/treninkResponseId/${treninkResponseId}/response/${responseValue}`);
+}
+
 /**
  * Logs in a user by sending a POST request to the specified API endpoint with the provided credentials.
  * @param {string} name - The username of the user to log in.

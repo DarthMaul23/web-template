@@ -24,7 +24,8 @@
 </template>
 
 <script>
-import * as Api from "../API/api";
+import * as LoginApi from "../../api/src/api/LoginApi";
+
 export default {
   data() {
     return {
@@ -35,8 +36,15 @@ export default {
   },
   methods: {
     async submitForm() {
+      console.log("submitForm called");
       try {
-        let response = await Api.LoginUser(this.username, this.password);
+        let loginApi = new LoginApi();
+        let response = await loginApi.loginPost({
+          loginModel: { username: this.username, password: this.password },
+        });
+
+        console.log(response);
+
         let data = response.data;
         console.log(data);
         // Redirect to main page if login is successful

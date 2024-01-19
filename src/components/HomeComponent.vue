@@ -3,7 +3,6 @@
 </template>
 
 <script>
-import ListOfUsers from '@/components/ListOfUsers.vue';
 
 export default {
   name: 'HomeComponent',
@@ -11,7 +10,6 @@ export default {
     msg: String
   },
   components:{
-    ListOfUsers
   },
   methods:{
     logout(){

@@ -77,16 +77,10 @@
 
 <script>
 // @ is an alias to /src
-import ListOfUsers from '@/components/ListOfUsers.vue';
-
 export default {
   name: 'HomeView',
   components: {
-    ListOfUsers
   }, mounted() {
-    if (localStorage.getItem("user") == null) {
-      this.$router.push('/login');
-    }
   },
   methods:{
     logout(){
